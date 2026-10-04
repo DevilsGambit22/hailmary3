@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
 
-      section:
+      action:
         description: "What do you want to update?"
         required: true
         type: choice
@@ -12,35 +12,31 @@ on:
           - tournament
           - staff
           - champions
+          - announcements
           - active_members
 
-      operation:
-        description: "Add/update or remove?"
-        required: true
-        type: choice
-        options:
-          - add
-          - remove
+      # =====================================================
+      # TOURNAMENT
+      # =====================================================
 
-      id:
-        description: "Tournament ID"
-        required: false
-        type: string
-
-      title:
+      tournament_name:
         description: "Tournament name"
         required: false
         type: string
 
-      url:
+      tournament_url:
         description: "Tournament URL"
         required: false
         type: string
 
-      button:
+      tournament_button:
         description: "Tournament button text"
         required: false
         type: string
+
+      # =====================================================
+      # STAFF
+      # =====================================================
 
       username:
         description: "Chess.com username"
@@ -52,299 +48,292 @@ on:
         required: false
         type: string
 
-      order:
-        description: "Staff display order"
-        required: false
-        default: "999"
-        type: string
-
-      place:
-        description: "Champion placement"
+      staff_action:
+        description: "Staff action"
         required: false
         type: choice
         options:
-          - first
-          - second
-          - third
+          - add
+          - remove
 
-      member1:
-        description: "Active Member #1 Chess.com username"
+      # =====================================================
+      # CHAMPIONS
+      # =====================================================
+
+      champion_first:
+        description: "1st Place username"
         required: false
         type: string
 
-      member2:
-        description: "Active Member #2 Chess.com username"
+      champion_second:
+        description: "2nd Place username"
         required: false
         type: string
 
-      member3:
-        description: "Active Member #3 Chess.com username"
+      champion_third:
+        description: "3rd Place username"
         required: false
         type: string
+
+      # =====================================================
+      # ANNOUNCEMENTS
+      # =====================================================
+
+      announcement_title:
+        description: "Announcement title"
+        required: false
+        type: string
+
+      announcement_message:
+        description: "Announcement message"
+        required: false
+        type: string
+
+      # =====================================================
+      # ACTIVE MEMBERS
+      # =====================================================
+
+      active_member_1:
+        description: "Active Member #1"
+        required: false
+        type: string
+
+      active_member_2:
+        description: "Active Member #2"
+        required: false
+        type: string
+
+      active_member_3:
+        description: "Active Member #3"
+        required: false
+        type: string
+
 
 permissions:
   contents: write
 
+
 jobs:
 
-  update-dashboard:
+  manage-dashboard:
 
     runs-on: ubuntu-latest
 
     steps:
 
+      # =====================================================
+      # CHECKOUT
+      # =====================================================
+
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
 
-      - name: Update dashboard JSON
+      # =====================================================
+      # ENSURE GENERATED DIRECTORY EXISTS
+      # =====================================================
+
+      - name: Prepare generated directory
+        run: |
+          mkdir -p generated
+
+
+      # =====================================================
+      # TOURNAMENT
+      # =====================================================
+
+      - name: Update tournament
+        if: ${{ inputs.action == 'tournament' }}
         env:
+          NAME: ${{ inputs.tournament_name }}
+          URL: ${{ inputs.tournament_url }}
+          BUTTON: ${{ inputs.tournament_button }}
+        run: |
 
-          SECTION: ${{ inputs.section }}
-          OPERATION: ${{ inputs.operation }}
+          jq -n \
+            --arg name "$NAME" \
+            --arg url "$URL" \
+            --arg button "$BUTTON" \
+            '[
+              {
+                name: $name,
+                url: $url,
+                button: (
+                  if $button == ""
+                  then $name
+                  else $button
+                  end
+                ),
+                active: true
+              }
+            ]' > generated/tournaments.json
 
-          ID: ${{ inputs.id }}
-          TITLE: ${{ inputs.title }}
-          URL: ${{ inputs.url }}
-          BUTTON: ${{ inputs.button }}
 
+      # =====================================================
+      # STAFF
+      # =====================================================
+
+      - name: Update staff
+        if: ${{ inputs.action == 'staff' }}
+        env:
           USERNAME: ${{ inputs.username }}
           ROLE: ${{ inputs.role }}
-          ORDER: ${{ inputs.order }}
-
-          PLACE: ${{ inputs.place }}
-
-          MEMBER1: ${{ inputs.member1 }}
-          MEMBER2: ${{ inputs.member2 }}
-          MEMBER3: ${{ inputs.member3 }}
-
+          STAFF_ACTION: ${{ inputs.staff_action }}
         run: |
 
-          python <<'PY'
+          if [ ! -f generated/staff.json ]; then
+            echo '[]' > generated/staff.json
+          fi
 
-          import json
-          import os
-          from pathlib import Path
+          if [ "$STAFF_ACTION" = "remove" ]; then
 
-          generated = Path("generated")
+            jq \
+              --arg username "$USERNAME" \
+              '[
+                .[] |
+                select(
+                  (.username | ascii_downcase) !=
+                  ($username | ascii_downcase)
+                )
+              ]' \
+              generated/staff.json \
+              > generated/staff.tmp
 
-          generated.mkdir(
-              exist_ok=True
-          )
+          else
 
-          section = os.environ["SECTION"]
-          operation = os.environ["OPERATION"]
-
-
-          if section == "tournament":
-
-              path = generated / "tournaments.json"
-
-              if path.exists():
-                  data = json.loads(path.read_text())
-              else:
-                  data = []
-
-              tournament_id = (
-                  os.environ
-                  .get("ID","")
-                  .strip()
-              )
-
-              if operation == "remove":
-
-                  data = [
-                      item
-                      for item in data
-                      if item.get("id") != tournament_id
-                  ]
-
-              else:
-
-                  record = {
-                      "id": tournament_id,
-                      "name": os.environ.get("TITLE","").strip(),
-                      "button": os.environ.get("BUTTON","").strip(),
-                      "url": os.environ.get("URL","").strip(),
-                      "active": True
-                  }
-
-                  replaced = False
-
-                  for i,item in enumerate(data):
-
-                      if item.get("id") == tournament_id:
-
-                          data[i] = record
-                          replaced = True
-                          break
-
-                  if not replaced:
-                      data.append(record)
-
-              path.write_text(
-                  json.dumps(
-                      data,
-                      indent=2
-                  )
-              )
-
-
-          elif section == "staff":
-
-              path = generated / "staff.json"
-
-              if path.exists():
-                  data = json.loads(path.read_text())
-              else:
-                  data = []
-
-              username = (
-                  os.environ
-                  .get("USERNAME","")
-                  .strip()
-              )
-
-              if operation == "remove":
-
-                  data = [
-                      member
-                      for member in data
-                      if member.get("username","").lower()
-                      != username.lower()
-                  ]
-
-              else:
-
-                  try:
-                      order = int(
-                          os.environ.get(
-                              "ORDER",
-                              "999"
-                          )
-                      )
-                  except:
-                      order = 999
-
-                  record = {
-                      "username": username,
-                      "role": os.environ.get("ROLE","").strip(),
-                      "order": order
-                  }
-
-                  replaced = False
-
-                  for i,member in enumerate(data):
-
-                      if member.get("username","").lower() == username.lower():
-
-                          data[i] = record
-                          replaced = True
-                          break
-
-                  if not replaced:
-                      data.append(record)
-
-              data.sort(
-                  key=lambda x:
-                  x.get("order",999)
-              )
-
-              path.write_text(
-                  json.dumps(
-                      data,
-                      indent=2
-                  )
-              )
-
-
-          elif section == "champions":
-
-              path = generated / "champions.json"
-
-              if path.exists():
-                  data = json.loads(path.read_text())
-              else:
-                  data = {
-                      "first":"",
-                      "second":"",
-                      "third":""
-                  }
-
-              place = (
-                  os.environ
-                  .get("PLACE","")
-                  .strip()
-              )
-
-              username = (
-                  os.environ
-                  .get("USERNAME","")
-                  .strip()
-              )
-
-              if place not in [
-                  "first",
-                  "second",
-                  "third"
-              ]:
-                  raise SystemExit(
-                      "Invalid champion place"
-                  )
-
-              if operation == "remove":
-                  data[place] = ""
-              else:
-                  data[place] = username
-
-              path.write_text(
-                  json.dumps(
-                      data,
-                      indent=2
-                  )
-              )
-
-
-          elif section == "active_members":
-
-              path = generated / "active-members.json"
-
-              members = [
-                  os.environ.get("MEMBER1", "").strip(),
-                  os.environ.get("MEMBER2", "").strip(),
-                  os.environ.get("MEMBER3", "").strip(),
+            jq \
+              --arg username "$USERNAME" \
+              --arg role "$ROLE" \
+              '
+              [
+                .[] |
+                select(
+                  (.username | ascii_downcase) !=
+                  ($username | ascii_downcase)
+                )
               ]
-
-              data = {
-                  "members": members
-              }
-
-              path.write_text(
-                  json.dumps(
-                      data,
-                      indent=2
+              +
+              [
+                {
+                  username: $username,
+                  role: $role,
+                  order: (
+                    length + 1
                   )
-              )
+                }
+              ]
+              ' \
+              generated/staff.json \
+              > generated/staff.tmp
 
-          PY
+          fi
 
-      - name: Commit changes
+          mv \
+            generated/staff.tmp \
+            generated/staff.json
+
+
+      # =====================================================
+      # CHAMPIONS
+      # =====================================================
+
+      - name: Update champions
+        if: ${{ inputs.action == 'champions' }}
+        env:
+          FIRST: ${{ inputs.champion_first }}
+          SECOND: ${{ inputs.champion_second }}
+          THIRD: ${{ inputs.champion_third }}
         run: |
 
-          git config user.name "ACFA Dashboard Bot"
+          jq -n \
+            --arg first "$FIRST" \
+            --arg second "$SECOND" \
+            --arg third "$THIRD" \
+            '{
+              "fall-2026": {
+                first: $first,
+                second: $second,
+                third: $third
+              }
+            }' > generated/champions.json
 
-          git config user.email "actions@users.noreply.github.com"
+
+      # =====================================================
+      # ANNOUNCEMENTS
+      # =====================================================
+
+      - name: Update announcements
+        if: ${{ inputs.action == 'announcements' }}
+        env:
+          TITLE: ${{ inputs.announcement_title }}
+          MESSAGE: ${{ inputs.announcement_message }}
+        run: |
+
+          jq -n \
+            --arg title "$TITLE" \
+            --arg message "$MESSAGE" \
+            '{
+              title: $title,
+              message: $message
+            }' > generated/announcements.json
+
+
+      # =====================================================
+      # ACTIVE MEMBERS
+      # =====================================================
+
+      - name: Update active members
+        if: ${{ inputs.action == 'active_members' }}
+        env:
+          MEMBER1: ${{ inputs.active_member_1 }}
+          MEMBER2: ${{ inputs.active_member_2 }}
+          MEMBER3: ${{ inputs.active_member_3 }}
+        run: |
+
+          jq -n \
+            --arg member1 "$MEMBER1" \
+            --arg member2 "$MEMBER2" \
+            --arg member3 "$MEMBER3" \
+            '{
+              members: [
+                $member1,
+                $member2,
+                $member3
+              ]
+              | map(
+                  select(
+                    length > 0
+                  )
+                )
+            }' > generated/active-members.json
+
+
+      # =====================================================
+      # COMMIT CHANGES
+      # =====================================================
+
+      - name: Commit dashboard changes
+        run: |
+
+          git config \
+            user.name \
+            "ACFA Dashboard Bot"
+
+          git config \
+            user.email \
+            "actions@github.com"
 
           git add generated/
 
-          if git diff --cached --quiet
-          then
-            echo "No changes."
-          else
-            git commit -m "Update ACFA dashboard data"
-            git push
+          if git diff --cached --quiet; then
+
+            echo "No dashboard changes detected."
+
+            exit 0
+
           fi
+
+          git commit \
+            -m "Update ACFA dashboard: ${{ inputs.action }}"
+
+          git push
