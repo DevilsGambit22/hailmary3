@@ -1,0 +1,16 @@
+[
+  {
+    "id": "fall-2026",
+    "name": "ACFA Fall Championship",
+    "button": "Enter Fall Championship",
+    "url": "",
+    "active": true
+  },
+  {
+    "id": "",
+    "name": "Fall Tournament",
+    "button": "Enter Tournament",
+    "url": "https://www.chess.com/tournament/open-fall-championship-tournament",
+    "active": true
+  }
+]

@@ -1,0 +1,20 @@
+{
+  "club": {
+    "name": "And Chess For All Official",
+    "slug": "and-chess-for-all-official"
+  },
+  "boards": {
+    "newest_members": {
+      "limit": 5
+    },
+    "titled_players": {
+      "limit": 2
+    }
+  },
+  "links": {
+    "forums": "https://www.chess.com/clubs/forum/and-chess-for-all-official",
+    "events": "https://www.chess.com/clubs/events/and-chess-for-all-official",
+    "club": "https://www.chess.com/club/and-chess-for-all-official",
+    "notes": "https://www.chess.com/club/notes/and-chess-for-all-official"
+  }
+}

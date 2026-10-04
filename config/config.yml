@@ -1,0 +1,32 @@
+club:
+  name: "And Chess For All Official"
+  slug: "and-chess-for-all-official"
+  url: "https://www.chess.com/club/and-chess-for-all-official"
+  motto: "Every Player Belongs • Every Move Matters"
+
+boards:
+  newest_members:
+    enabled: true
+    limit: 5
+  titled_players:
+    enabled: true
+    limit: 2
+    pinned_usernames:
+      - "ChanelinmyYSL"
+      - "DevilsGambit22"
+
+refresh:
+  every_hours: 12
+
+display:
+  particles: true
+  hover_pop: true
+  show_ratings: true
+  show_titles: true
+  show_avatars: true
+
+links:
+  forums: "https://www.chess.com/clubs/forum/and-chess-for-all-official"
+  events: "https://www.chess.com/clubs/events/and-chess-for-all-official"
+  club: "https://www.chess.com/club/and-chess-for-all-official"
+  notes: "https://www.chess.com/club/notes/and-chess-for-all-official"

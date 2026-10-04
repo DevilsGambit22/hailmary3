@@ -1,0 +1,3599 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#071427">
+
+<title>ACFA Live Dashboard</title>
+
+<style>
+:root{
+  --bg:#03070d;
+  --navy:#06152f;
+  --blue:#12488e;
+  --gold:#d5a73d;
+  --gold2:#f4d989;
+  --text:#f7f9fc;
+  --muted:#9eb0c9;
+  --ring:rgba(216,172,71,.46);
+  --shadow:0 12px 34px rgba(0,0,0,.44);
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html,
+body{
+  width:100%;
+  height:100%;
+  margin:0;
+  padding:0;
+  overflow:hidden !important;
+  background:#03070d;
+  scrollbar-width:none;
+  -ms-overflow-style:none;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar{
+  display:none;
+}
+
+body{
+  color:var(--text);
+  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+  background:
+    radial-gradient(circle at 50% -5%,rgba(22,79,151,.38),transparent 34%),
+    linear-gradient(180deg,#06101f,#03070d 72%);
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+button{
+  font:inherit;
+}
+
+/* =========================================================
+   OUTER EMBERS
+   ========================================================= */
+
+#fx{
+  position:fixed;
+  inset:0;
+  overflow:hidden;
+  pointer-events:none;
+  z-index:0;
+}
+
+.spark{
+  position:absolute;
+  bottom:-10px;
+  width:3px;
+  height:3px;
+  border-radius:50%;
+  background:#f3c85c;
+  box-shadow:0 0 8px #f3c85c;
+  opacity:.55;
+  animation:rise linear infinite;
+}
+
+@keyframes rise{
+  to{
+    transform:translateY(-110vh);
+    opacity:0;
+  }
+}
+
+/* =========================================================
+   MAIN APP
+   ========================================================= */
+
+.app{
+  position:relative;
+  z-index:1;
+  width:100%;
+  max-width:470px;
+  height:100vh;
+  height:100dvh;
+  margin:0 auto;
+  padding:6px;
+  overflow:hidden;
+}
+
+.frame{
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  border:1px solid rgba(216,172,71,.58);
+  border-radius:20px;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(8,30,60,.96),
+      rgba(4,13,27,.99)
+    );
+  box-shadow:
+    0 0 12px rgba(216,172,71,.18),
+    0 0 26px rgba(25,89,180,.14),
+    0 14px 38px rgba(0,0,0,.48);
+  animation:frameGlow 4s ease-in-out infinite alternate;
+}
+
+@keyframes frameGlow{
+  from{
+    box-shadow:
+      0 0 10px rgba(216,172,71,.18),
+      0 0 20px rgba(25,89,180,.12),
+      0 14px 38px rgba(0,0,0,.48);
+  }
+
+  to{
+    box-shadow:
+      0 0 18px rgba(216,172,71,.34),
+      0 0 34px rgba(32,111,224,.24),
+      0 16px 42px rgba(0,0,0,.52);
+  }
+}
+
+/* =========================================================
+   INTERNAL EMBERS
+   ========================================================= */
+
+.frame-embers{
+  position:absolute;
+  inset:0;
+  overflow:hidden;
+  pointer-events:none;
+  z-index:2;
+}
+
+.frame-ember{
+  position:absolute;
+  bottom:-12px;
+  width:3px;
+  height:3px;
+  border-radius:50%;
+  background:#ffd36b;
+  box-shadow:
+    0 0 7px #ffbf42,
+    0 0 12px rgba(255,133,34,.65);
+  opacity:.7;
+  animation:sidebarEmberRise linear infinite;
+}
+
+@keyframes sidebarEmberRise{
+  0%{
+    transform:translateY(0) translateX(0) scale(.7);
+    opacity:0;
+  }
+
+  12%{
+    opacity:.75;
+  }
+
+  70%{
+    opacity:.55;
+  }
+
+  100%{
+    transform:translateY(-1100px) translateX(30px) scale(1.2);
+    opacity:0;
+  }
+}
+
+.hero,
+.clock-card,
+.stats,
+.tabs{
+  flex:0 0 auto;
+}
+
+/* =========================================================
+   HERO
+   ========================================================= */
+
+.hero{
+  position:relative;
+  z-index:3;
+  overflow:hidden;
+  min-height:220px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.acfa-animated-logo{
+  display:block;
+  width:100%;
+  max-width:420px;
+  max-height:245px;
+  object-fit:contain;
+  background:transparent;
+  filter:
+    drop-shadow(0 0 8px rgba(244,217,137,.18));
+  transition:
+    transform .35s ease,
+    filter .35s ease;
+  animation:
+    logoFloat 4.5s ease-in-out infinite;
+}
+
+@keyframes logoFloat{
+  0%,100%{
+    transform:
+      translateY(0)
+      scale(1);
+  }
+
+  50%{
+    transform:
+      translateY(-4px)
+      scale(1.015);
+  }
+}
+
+.hero:hover .acfa-animated-logo{
+  transform:
+    translateY(-5px)
+    scale(1.055);
+  filter:
+    drop-shadow(0 0 10px rgba(255,214,112,.65))
+    drop-shadow(0 0 24px rgba(45,132,255,.38));
+}
+
+.hero::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:
+    linear-gradient(
+      180deg,
+      transparent 70%,
+      rgba(2,8,17,.55) 100%
+    );
+}
+
+/* =========================================================
+   CLOCK
+   ========================================================= */
+
+.clock-card{
+  position:relative;
+  z-index:3;
+  margin:5px 8px;
+  padding:8px;
+  text-align:center;
+  border:1px solid var(--ring);
+  border-radius:15px;
+  background:
+    radial-gradient(
+      circle at 50% 0,
+      rgba(24,92,184,.30),
+      rgba(5,18,38,.97) 68%
+    );
+  box-shadow:
+    inset 0 0 24px rgba(34,102,206,.16),
+    0 8px 22px rgba(0,0,0,.28);
+}
+
+.digital-clock{
+  color:#dff4ff;
+  font-family:"Courier New",monospace;
+  font-size:clamp(25px,8vw,38px);
+  font-weight:700;
+  letter-spacing:.06em;
+  text-shadow:
+    0 0 6px #58b7ff,
+    0 0 16px rgba(34,143,255,.9);
+}
+
+.digital-date{
+  margin-top:1px;
+  color:var(--gold2);
+  font-family:Georgia,serif;
+  font-size:11px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
+
+.clock-label{
+  margin-top:3px;
+  color:var(--muted);
+  font-size:7px;
+  letter-spacing:.2em;
+}
+
+/* =========================================================
+   STATS
+   ========================================================= */
+
+.stats{
+  position:relative;
+  z-index:3;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:6px;
+  padding:4px 8px 7px;
+}
+
+.stat{
+  padding:7px 4px;
+  text-align:center;
+  border:1px solid var(--ring);
+  border-radius:12px;
+  background:
+    linear-gradient(
+      180deg,
+      #0c2d5d,
+      #071b38
+    );
+  transition:
+    transform .22s ease,
+    box-shadow .22s ease;
+}
+
+.stat:hover{
+  transform:
+    translateY(-3px)
+    scale(1.035);
+  box-shadow:
+    0 0 14px rgba(216,172,71,.30),
+    0 0 22px rgba(27,96,201,.22);
+}
+
+.stat b{
+  display:block;
+  color:var(--gold2);
+  font-size:16px;
+}
+
+.stat span{
+  display:block;
+  margin-top:2px;
+  color:var(--muted);
+  font-size:8px;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+}
+
+/* =========================================================
+   NAVIGATION
+   ========================================================= */
+
+.tabs{
+  position:relative;
+  z-index:10;
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:5px;
+  padding:5px 8px 7px;
+  background:rgba(3,8,16,.95);
+  backdrop-filter:blur(10px);
+}
+
+.tab{
+  cursor:pointer;
+  padding:7px 2px;
+  color:#dfe8f5;
+  font-size:10px;
+  border:1px solid var(--ring);
+  border-radius:10px;
+  background:#0a2449;
+  transition:
+    transform .22s ease,
+    box-shadow .22s ease,
+    background .22s ease;
+}
+
+.tab:hover,
+.tab.active{
+  transform:
+    translateY(-2px)
+    scale(1.05);
+  background:#12488e;
+  box-shadow:
+    0 0 16px rgba(40,118,235,.42),
+    0 0 8px rgba(216,172,71,.24);
+}
+
+/* =========================================================
+   INTERNAL SCROLL
+   ========================================================= */
+
+.content{
+  position:relative;
+  z-index:3;
+  flex:1 1 auto;
+  min-height:0;
+  width:100%;
+  padding:0 8px 16px;
+  overflow-y:auto !important;
+  overflow-x:hidden !important;
+  overscroll-behavior:contain;
+  touch-action:pan-y;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:thin;
+  scrollbar-color:#d5a73d transparent;
+}
+
+.content::-webkit-scrollbar{
+  width:4px;
+}
+
+.content::-webkit-scrollbar-track{
+  background:transparent;
+}
+
+.content::-webkit-scrollbar-thumb{
+  background:
+    linear-gradient(
+      180deg,
+      #f4d989,
+      #b98220
+    );
+  border-radius:20px;
+}
+
+/* =========================================================
+   PANELS
+   ========================================================= */
+
+.panel{
+  display:none;
+}
+
+.panel.active{
+  display:block;
+}
+
+/* =========================================================
+   CARDS
+   ========================================================= */
+
+.card{
+  position:relative;
+  margin:8px 0;
+  padding:11px;
+  border:1px solid var(--ring);
+  border-radius:15px;
+  background:
+    linear-gradient(
+      145deg,
+      rgba(13,45,89,.92),
+      rgba(5,18,38,.98)
+    );
+  box-shadow:var(--shadow);
+  transition:
+    transform .22s ease,
+    box-shadow .22s ease;
+}
+
+.card:hover{
+  transform:
+    translateY(-4px)
+    scale(1.015);
+  box-shadow:
+    0 0 15px rgba(216,172,71,.22),
+    0 0 26px rgba(35,102,205,.22),
+    0 18px 40px rgba(0,0,0,.48);
+}
+
+.card h2{
+  margin:0 0 8px;
+  color:var(--gold2);
+  font:700 18px Georgia,serif;
+}
+
+/* =========================================================
+   LADY JUSTICE
+   ========================================================= */
+
+.lady{
+  display:flex;
+  gap:10px;
+  align-items:center;
+}
+
+.lady img{
+  width:105px;
+  height:145px;
+  object-fit:contain;
+}
+
+.lady p{
+  margin:0;
+  color:#dce4f0;
+  font-size:12px;
+  line-height:1.5;
+}
+
+/* =========================================================
+   DISCORD
+   ========================================================= */
+
+.discord-card{
+  overflow:hidden;
+  background:
+    radial-gradient(
+      circle at 50% 0,
+      rgba(88,101,242,.24),
+      transparent 55%
+    ),
+    linear-gradient(
+      145deg,
+      rgba(17,38,79,.96),
+      rgba(5,18,38,.98)
+    );
+}
+
+.discord-header{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:8px;
+}
+
+.discord-icon{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:42px;
+  height:42px;
+  flex:0 0 42px;
+  border:1px solid rgba(244,217,137,.55);
+  border-radius:12px;
+  background:
+    linear-gradient(
+      145deg,
+      #5865f2,
+      #3646c8
+    );
+  box-shadow:
+    0 0 14px rgba(88,101,242,.38);
+}
+
+.discord-icon svg{
+  width:25px;
+  height:25px;
+  fill:#fff;
+}
+
+.discord-title{
+  min-width:0;
+}
+
+.discord-title h2{
+  margin:0;
+}
+
+.discord-title small{
+  color:#aeb9cc;
+  font-size:9px;
+}
+
+.discord-copy{
+  margin:0 0 10px;
+  color:#dce4f0;
+  font-size:11px;
+  line-height:1.5;
+}
+
+.discord-button{
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  width:100%;
+  overflow:hidden;
+  padding:11px 12px;
+  color:#fff;
+  font-size:12px;
+  font-weight:800;
+  border:1px solid rgba(244,217,137,.68);
+  border-radius:11px;
+  background:
+    linear-gradient(
+      180deg,
+      #6773f4,
+      #4755d7
+    );
+  box-shadow:
+    0 0 12px rgba(88,101,242,.34),
+    inset 0 0 12px rgba(255,255,255,.08);
+  transition:
+    transform .22s ease,
+    box-shadow .22s ease,
+    border-color .22s ease;
+}
+
+.discord-button:hover{
+  transform:
+    translateY(-3px)
+    scale(1.025);
+  border-color:#f4d989;
+  box-shadow:
+    0 0 16px rgba(244,217,137,.30),
+    0 0 28px rgba(88,101,242,.48);
+}
+
+.discord-button svg{
+  width:18px;
+  height:18px;
+  fill:#fff;
+}
+
+/* =========================================================
+   ANNOUNCEMENTS
+   ========================================================= */
+
+.announcement{
+  padding:9px;
+  border-left:3px solid var(--gold);
+  border-radius:8px;
+  background:rgba(255,255,255,.035);
+}
+
+.announcement strong{
+  display:block;
+  margin-bottom:4px;
+}
+
+/* =========================================================
+   LINKS
+   ========================================================= */
+
+.links{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:6px;
+}
+
+.links a{
+  padding:9px;
+  text-align:center;
+  font-size:11px;
+  border:1px solid var(--ring);
+  border-radius:9px;
+  background:#0d3470;
+  cursor:pointer;
+  transition:
+    transform .2s ease,
+    background .2s ease,
+    box-shadow .2s ease;
+}
+
+.links a:hover{
+  transform:translateY(-2px);
+  background:#12488e;
+  box-shadow:
+    0 0 12px rgba(40,118,235,.32),
+    0 0 7px rgba(216,172,71,.18);
+}
+
+/* =========================================================
+   PARTNER CLUBS
+   ========================================================= */
+
+.partner-card{
+  overflow:hidden;
+}
+
+.partner-heading{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:9px;
+}
+
+.partner-heading h2{
+  margin:0;
+}
+
+.partner-subtitle{
+  margin-top:2px;
+  color:var(--muted);
+  font-size:9px;
+}
+
+.partner-status{
+  flex:0 0 auto;
+  padding:4px 7px;
+  color:var(--gold2);
+  font-size:7px;
+  font-weight:800;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  border:1px solid var(--ring);
+  border-radius:999px;
+  background:#071b38;
+}
+
+.partner-window{
+  position:relative;
+  height:190px;
+  overflow:hidden;
+  border:1px solid rgba(216,172,71,.24);
+  border-radius:12px;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(4,14,29,.92),
+      rgba(8,28,57,.82)
+    );
+}
+
+.partner-window::before,
+.partner-window::after{
+  content:"";
+  position:absolute;
+  z-index:5;
+  left:0;
+  right:0;
+  height:25px;
+  pointer-events:none;
+}
+
+.partner-window::before{
+  top:0;
+  background:
+    linear-gradient(
+      180deg,
+      #061326,
+      transparent
+    );
+}
+
+.partner-window::after{
+  bottom:0;
+  background:
+    linear-gradient(
+      0deg,
+      #061326,
+      transparent
+    );
+}
+
+.partner-track{
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+  padding:8px;
+  animation:partnerScroll 20s linear infinite;
+}
+
+.partner-window:hover .partner-track{
+  animation-play-state:paused;
+}
+
+@keyframes partnerScroll{
+  0%{
+    transform:translateY(0);
+  }
+
+  100%{
+    transform:translateY(-50%);
+  }
+}
+
+.partner-club{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  min-height:54px;
+  flex:0 0 54px;
+  padding:6px 8px;
+  border:1px solid rgba(216,172,71,.28);
+  border-radius:10px;
+  background:
+    linear-gradient(
+      145deg,
+      rgba(13,52,112,.82),
+      rgba(6,26,55,.94)
+    );
+  transition:
+    transform .2s ease,
+    border-color .2s ease,
+    box-shadow .2s ease;
+}
+
+.partner-club:hover{
+  transform:
+    translateX(3px)
+    scale(1.01);
+  border-color:rgba(244,217,137,.68);
+  box-shadow:
+    0 0 12px rgba(35,102,205,.25);
+}
+
+.partner-logo{
+  width:40px;
+  height:40px;
+  flex:0 0 40px;
+  object-fit:cover;
+  border:2px solid var(--gold);
+  border-radius:50%;
+  background:#071b38;
+}
+
+.partner-info{
+  min-width:0;
+  flex:1;
+}
+
+.partner-name{
+  display:block;
+  overflow:hidden;
+  color:#fff;
+  font-size:11px;
+  font-weight:800;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.partner-info small{
+  display:block;
+  margin-top:2px;
+  color:var(--gold2);
+  font-size:8px;
+}
+
+.partner-arrow{
+  flex:0 0 auto;
+  color:var(--gold2);
+  font-size:17px;
+}
+
+/* =========================================================
+   BOARD BASE
+   ========================================================= */
+
+.board{
+  position:relative;
+  width:100%;
+  margin:8px 0;
+  overflow:hidden;
+  border:1px solid var(--ring);
+  border-radius:17px;
+  background:transparent;
+  box-shadow:var(--shadow);
+}
+
+.board > img{
+  display:block;
+  width:100%;
+  height:auto;
+  margin:0;
+}
+
+/* =========================================================
+   NEW MEMBERS
+   ========================================================= */
+
+.member-slots{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+}
+
+.member{
+  position:absolute;
+  display:block;
+  height:7.4%;
+  pointer-events:auto;
+  cursor:pointer;
+}
+
+.member:nth-child(1){
+  top:43.2%;
+  left:16.8%;
+  width:73%;
+}
+
+.member:nth-child(1) img{
+  left:0%;
+  top:50%;
+}
+
+.member:nth-child(1) > div{
+  left:37px;
+  top:52%;
+}
+
+.member:nth-child(2){
+  top:51.6%;
+  left:16.8%;
+  width:73%;
+}
+
+.member:nth-child(2) img{
+  left:0%;
+  top:50%;
+}
+
+.member:nth-child(2) > div{
+  left:37px;
+  top:52%;
+}
+
+.member:nth-child(3){
+  top:60.0%;
+  left:16.8%;
+  width:73%;
+}
+
+.member:nth-child(3) img{
+  left:0%;
+  top:50%;
+}
+
+.member:nth-child(3) > div{
+  left:37px;
+  top:52%;
+}
+
+.member:nth-child(4){
+  top:68.4%;
+  left:16.8%;
+  width:73%;
+}
+
+.member:nth-child(4) img{
+  left:0%;
+  top:50%;
+}
+
+.member:nth-child(4) > div{
+  left:37px;
+  top:52%;
+}
+
+.member:nth-child(5){
+  top:76.8%;
+  left:16.8%;
+  width:73%;
+}
+
+.member:nth-child(5) img{
+  left:0%;
+  top:50%;
+}
+
+.member:nth-child(5) > div{
+  left:37px;
+  top:52%;
+}
+
+.member img{
+  position:absolute;
+  transform:translateY(-50%);
+  width:30px;
+  height:30px;
+  object-fit:cover;
+  border:2px solid #164b8f;
+  border-radius:50%;
+  background:#d8e4f4;
+  box-shadow:0 0 6px rgba(22,75,143,.40);
+}
+
+.member > div{
+  position:absolute;
+  right:4px;
+  transform:translateY(-50%);
+  min-width:0;
+  overflow:hidden;
+}
+
+.member strong{
+  display:block;
+  width:100%;
+  overflow:hidden;
+  color:#041426;
+  font-size:12px;
+  font-weight:900;
+  line-height:1;
+  letter-spacing:.01em;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  text-shadow:
+    0 1px 0 #fff,
+    0 0 2px rgba(255,255,255,.75);
+}
+
+.member small{
+  display:block;
+  margin-top:2px;
+  color:#233b58;
+  font-size:8px;
+  font-weight:800;
+  line-height:1;
+  white-space:nowrap;
+}
+
+/* =========================================================
+   ACTIVE MEMBERS
+   ========================================================= */
+
+.active-board{
+  position:relative;
+}
+
+.active-member-slots{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+}
+
+.active-member{
+  position:absolute;
+  left:14%;
+  width:78%;
+  height:11%;
+  display:flex;
+  align-items:center;
+  gap:9px;
+  padding:0 4%;
+  pointer-events:auto;
+  cursor:pointer;
+  transition:transform .22s ease,filter .22s ease;
+}
+
+.active-member:nth-child(1){ top:59%; }
+.active-member:nth-child(2){ top:72%; }
+.active-member:nth-child(3){ top:85%; }
+
+.active-member:hover{
+  transform:translateX(4px) scale(1.015);
+  filter:drop-shadow(0 3px 5px rgba(0,0,0,.25));
+}
+
+.active-member-avatar{
+  width:38px;
+  height:38px;
+  flex:0 0 38px;
+  object-fit:cover;
+  border:2px solid var(--gold2);
+  border-radius:50%;
+  background:#071b38;
+  box-shadow:0 0 7px rgba(213,167,61,.42);
+}
+
+.active-member-info{
+  min-width:0;
+  flex:1;
+}
+
+.active-member-info strong{
+  display:block;
+  overflow:hidden;
+  color:#fff;
+  font-size:12px;
+  font-weight:900;
+  line-height:1.05;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  text-shadow:0 1px 2px rgba(0,0,0,.9);
+}
+
+.active-member-info small{
+  display:block;
+  margin-top:3px;
+  color:var(--gold2);
+  font-size:8px;
+  font-weight:800;
+  white-space:nowrap;
+  text-shadow:0 1px 2px rgba(0,0,0,.9);
+}
+
+/* =========================================================
+   TITLED PLAYERS
+   ========================================================= */
+
+.titled-slots{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+}
+
+.titled-member{
+  position:absolute;
+  display:block;
+  height:12%;
+  pointer-events:auto;
+  cursor:pointer;
+}
+
+.titled-member:nth-child(1){
+  top:59.0%;
+  left:26.5%;
+  width:63%;
+}
+
+.titled-member:nth-child(1) img{
+  left:0%;
+  top:52%;
+}
+
+.titled-member:nth-child(1) > div{
+  left:44px;
+  top:52%;
+}
+
+.titled-member:nth-child(2){
+  top:72.0%;
+  left:26.5%;
+  width:63%;
+}
+
+.titled-member:nth-child(2) img{
+  left:0%;
+  top:52%;
+}
+
+.titled-member:nth-child(2) > div{
+  left:44px;
+  top:52%;
+}
+
+.titled-member img{
+  position:absolute;
+  transform:translateY(-50%);
+  width:38px;
+  height:38px;
+  object-fit:cover;
+  border:2px solid #b98925;
+  border-radius:50%;
+  background:#e9eef7;
+  box-shadow:0 0 7px rgba(194,148,42,.45);
+}
+
+.titled-member > div{
+  position:absolute;
+  right:3px;
+  transform:translateY(-50%);
+  min-width:0;
+  overflow:hidden;
+}
+
+.titled-member strong{
+  display:flex;
+  align-items:center;
+  gap:5px;
+  width:100%;
+  overflow:hidden;
+  color:#041426;
+  font-size:12px;
+  font-weight:900;
+  line-height:1;
+  letter-spacing:.01em;
+  white-space:nowrap;
+  text-shadow:
+    0 1px 0 #fff,
+    0 0 2px rgba(255,255,255,.75);
+}
+
+.titled-username{
+  display:block;
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.badge{
+  flex:0 0 auto;
+  padding:2px 5px;
+  color:#fff;
+  font-size:7px;
+  font-weight:900;
+  border-radius:5px;
+  background:
+    linear-gradient(
+      180deg,
+      #d6a83c,
+      #936915
+    );
+}
+
+.titled-member small{
+  display:block;
+  margin-top:3px;
+  color:#233b58;
+  font-size:8px;
+  font-weight:800;
+  white-space:nowrap;
+}
+
+/* =========================================================
+   HOVERS
+   ========================================================= */
+
+.member,
+.titled-member{
+  transition:
+    transform .22s ease,
+    filter .22s ease;
+}
+
+.member:hover,
+.titled-member:hover{
+  transform:
+    translateX(3px)
+    scale(1.02);
+  filter:
+    drop-shadow(
+      0 3px 4px
+      rgba(0,0,0,.18)
+    );
+}
+
+/* =========================================================
+   TOURNAMENT
+   ========================================================= */
+
+.countdown{
+  padding:10px 0;
+  color:var(--gold2);
+  font-size:21px;
+  font-weight:800;
+  text-align:center;
+}
+
+.status{
+  display:inline-block;
+  padding:4px 7px;
+  color:#fff;
+  font-size:10px;
+  border-radius:999px;
+  background:#174d98;
+}
+
+.tournament-buttons{
+  display:grid;
+  gap:8px;
+  margin-top:12px;
+}
+
+.tournament-button{
+  display:block;
+  padding:11px 12px;
+  text-align:center;
+  color:#fff;
+  font-weight:700;
+  font-size:12px;
+  border:1px solid var(--ring);
+  border-radius:10px;
+  background:
+    linear-gradient(
+      180deg,
+      #1556a8,
+      #0a2d63
+    );
+}
+
+/* =========================================================
+   PODIUM
+   ========================================================= */
+
+.podium-stage{
+  position:relative;
+  margin-top:12px;
+  padding-top:82px;
+}
+
+.podium-art{
+  display:block;
+  width:100%;
+  height:auto;
+}
+
+.podium-player{
+  position:absolute;
+  z-index:5;
+  width:29%;
+  text-align:center;
+  transform:translateX(-50%);
+}
+
+.podium-player.first{
+  left:50%;
+  top:0;
+}
+
+.podium-player.second{
+  left:23%;
+  top:31px;
+}
+
+.podium-player.third{
+  left:77%;
+  top:31px;
+}
+
+.podium-avatar{
+  width:clamp(48px,14vw,68px);
+  height:clamp(48px,14vw,68px);
+  object-fit:cover;
+  border:3px solid var(--gold2);
+  border-radius:50%;
+  background:#0a2851;
+}
+
+.podium-rank{
+  color:var(--gold2);
+  font-size:10px;
+  font-weight:700;
+}
+
+.podium-name{
+  overflow:hidden;
+  color:#fff;
+  font-size:11px;
+  font-weight:800;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.podium-info{
+  color:var(--gold2);
+  font-size:8px;
+}
+
+/* =========================================================
+   STAFF
+   ========================================================= */
+
+.staff-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+}
+
+.staff-person{
+  padding:10px;
+  text-align:center;
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:12px;
+  background:rgba(255,255,255,.045);
+}
+
+.staff-avatar{
+  display:block;
+  width:54px;
+  height:54px;
+  margin:0 auto 7px;
+  object-fit:cover;
+  border:2px solid var(--gold);
+  border-radius:50%;
+}
+
+.staff-person strong{
+  display:block;
+  font-size:12px;
+}
+
+.staff-person small{
+  color:var(--gold2);
+  font-size:10px;
+}
+
+.footer{
+  padding:12px 0 4px;
+  color:#7f8ea3;
+  font-size:9px;
+  text-align:center;
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media(max-width:360px){
+
+  .app{
+    padding:4px;
+  }
+
+  .hero{
+    min-height:190px;
+  }
+
+  .acfa-animated-logo{
+    max-height:210px;
+  }
+
+  .digital-clock{
+    font-size:27px;
+  }
+
+  .member img{
+    width:27px;
+    height:27px;
+  }
+
+  .member strong{
+    font-size:10px;
+  }
+
+  .member small{
+    font-size:7px;
+  }
+
+  .titled-member img{
+    width:34px;
+    height:34px;
+  }
+
+  .titled-member strong{
+    font-size:10px;
+  }
+
+  .titled-member small{
+    font-size:7px;
+  }
+
+  .badge{
+    font-size:6px;
+  }
+
+  .partner-window{
+    height:180px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div id="fx"></div>
+
+<main class="app">
+
+<div class="frame">
+
+<div
+  id="frameEmbers"
+  class="frame-embers"
+></div>
+
+<!-- ======================================================
+     ANIMATED ACFA HERO
+     ====================================================== -->
+
+<section class="hero">
+
+<img
+  src="assets/images/ACFA_transparent_iris_sparkles_safe_under5MB.gif"
+  alt="And Chess For All"
+  class="acfa-animated-logo"
+>
+
+</section>
+
+<!-- ======================================================
+     CLOCK
+     ====================================================== -->
+
+<section class="clock-card">
+
+<div
+  id="digitalClock"
+  class="digital-clock"
+>
+--:--:--
+</div>
+
+<div
+  id="digitalDate"
+  class="digital-date"
+>
+Loading date…
+</div>
+
+<div class="clock-label">
+YOUR LOCAL TIME
+</div>
+
+</section>
+
+<!-- ======================================================
+     STATS
+     ====================================================== -->
+
+<section class="stats">
+
+<div class="stat">
+<b id="membersCount">—</b>
+<span>Members</span>
+</div>
+
+<div class="stat">
+<b id="titledCount">—</b>
+<span>Titled</span>
+</div>
+
+<div class="stat">
+<b id="nextEvent">Oct 5</b>
+<span>Next Event</span>
+</div>
+
+</section>
+
+<!-- ======================================================
+     TABS
+     ====================================================== -->
+
+<nav class="tabs">
+
+<button class="tab active" data-go="home">
+Home
+</button>
+
+<button class="tab" data-go="members">
+Members
+</button>
+
+<button class="tab" data-go="titled">
+Titled
+</button>
+
+<button class="tab" data-go="tourney">
+Tourney
+</button>
+
+<button class="tab" data-go="staff">
+Staff
+</button>
+
+</nav>
+
+<!-- ======================================================
+     CONTENT
+     ====================================================== -->
+
+<div
+  id="scrollContent"
+  class="content"
+>
+
+<!-- ======================================================
+     HOME
+     ====================================================== -->
+
+<section
+  id="home"
+  class="panel active"
+>
+
+<article class="card lady">
+
+<img
+  src="assets/images/lady-justice.png"
+  alt="Lady Justice"
+>
+
+<div>
+
+<h2>
+Welcome to ACFA
+</h2>
+
+<p>
+No matter your rating or experience, there’s a place for you here. Play, grow, support one another, and make every move count.
+</p>
+
+</div>
+
+</article>
+
+<!-- ======================================================
+     DISCORD
+     ====================================================== -->
+
+<article class="card discord-card">
+
+<div class="discord-header">
+
+<div class="discord-icon">
+
+<svg viewBox="0 0 24 24" aria-hidden="true">
+<path d="M19.54 5.34A16.3 16.3 0 0 0 15.5 4.1l-.5 1.03a14.7 14.7 0 0 0-6 0L8.5 4.1a16.4 16.4 0 0 0-4.05 1.25C1.9 9.1 1.2 12.76 1.55 16.36a16.2 16.2 0 0 0 4.96 2.52l1.19-1.63a10.7 10.7 0 0 1-1.86-.9l.46-.36a11.8 11.8 0 0 0 11.4 0l.47.36c-.6.35-1.22.65-1.87.9l1.2 1.63a16.1 16.1 0 0 0 4.96-2.52c.41-4.17-.72-7.8-3.02-11.02ZM8.68 14.44c-1.22 0-2.22-1.12-2.22-2.5s.98-2.5 2.22-2.5c1.25 0 2.25 1.13 2.22 2.5 0 1.38-.98 2.5-2.22 2.5Zm6.64 0c-1.22 0-2.22-1.12-2.22-2.5s.98-2.5 2.22-2.5c1.25 0 2.25 1.13 2.22 2.5 0 1.38-.97 2.5-2.22 2.5Z"/>
+</svg>
+
+</div>
+
+<div class="discord-title">
+
+<h2>
+Join the ACFA Discord
+</h2>
+
+<small>
+Stay connected beyond the board
+</small>
+
+</div>
+
+</div>
+
+<p class="discord-copy">
+Discord gives ACFA members a place to communicate in real time. Discuss games, share ideas, coordinate events, meet other members, and stay connected with the club beyond Chess.com.
+</p>
+
+<a
+  class="discord-button"
+  href="https://discord.gg/RRDtJ6h8W8"
+  target="_blank"
+  rel="noopener noreferrer"
+>
+
+<svg viewBox="0 0 24 24" aria-hidden="true">
+<path d="M19.54 5.34A16.3 16.3 0 0 0 15.5 4.1l-.5 1.03a14.7 14.7 0 0 0-6 0L8.5 4.1a16.4 16.4 0 0 0-4.05 1.25C1.9 9.1 1.2 12.76 1.55 16.36a16.2 16.2 0 0 0 4.96 2.52l1.19-1.63a10.7 10.7 0 0 1-1.86-.9l.46-.36a11.8 11.8 0 0 0 11.4 0l.47.36c-.6.35-1.22.65-1.87.9l1.2 1.63a16.1 16.1 0 0 0 4.96-2.52c.41-4.17-.72-7.8-3.02-11.02ZM8.68 14.44c-1.22 0-2.22-1.12-2.22-2.5s.98-2.5 2.22-2.5c1.25 0 2.25 1.13 2.22 2.5 0 1.38-.98 2.5-2.22 2.5Zm6.64 0c-1.22 0-2.22-1.12-2.22-2.5s.98-2.5 2.22-2.5c1.25 0 2.25 1.13 2.22 2.5 0 1.38-.97 2.5-2.22 2.5Z"/>
+</svg>
+
+Join the ACFA Discord
+
+</a>
+
+</article>
+
+<!-- ======================================================
+     ANNOUNCEMENTS
+     ====================================================== -->
+
+<article class="card">
+
+<h2>
+Announcements
+</h2>
+
+<div class="announcement">
+
+<strong>
+ACFA Fall Championship
+</strong>
+
+Registration is open through October 4.
+
+</div>
+
+</article>
+
+<!-- ======================================================
+     QUICK LINKS
+     ====================================================== -->
+
+<article class="card">
+
+<h2>
+Quick Links
+</h2>
+
+<div class="links">
+
+<a
+  href="https://www.chess.com/clubs/forum/and-chess-for-all-official"
+  target="_blank"
+  rel="noopener noreferrer"
+>
+Forums
+</a>
+
+<a
+  href="https://www.chess.com/clubs/events/and-chess-for-all-official"
+  target="_blank"
+  rel="noopener noreferrer"
+>
+Events
+</a>
+
+<a
+  href="#"
+  id="copyClubLink"
+  role="button"
+>
+Copy Club Link
+</a>
+
+<a
+  href="https://www.chess.com/club/notes/and-chess-for-all-official"
+  target="_blank"
+  rel="noopener noreferrer"
+>
+Notes
+</a>
+
+</div>
+
+</article>
+
+<!-- ======================================================
+     PARTNER CLUBS
+     ====================================================== -->
+
+<article class="card partner-card">
+
+<div class="partner-heading">
+
+<div>
+
+<h2>
+Partner Clubs
+</h2>
+
+<div class="partner-subtitle">
+Friends &amp; allies across the 64 squares
+</div>
+
+</div>
+
+<span
+  id="partnerStatus"
+  class="partner-status"
+>
+Loading…
+</span>
+
+</div>
+
+<div class="partner-window">
+
+<div
+  id="partnerTrack"
+  class="partner-track"
+></div>
+
+</div>
+
+</article>
+
+</section>
+
+<!-- ======================================================
+     MEMBERS
+     ====================================================== -->
+
+<section
+  id="members"
+  class="panel"
+>
+
+<div class="board">
+
+<img
+  src="assets/images/new-members-board.png"
+  alt="New Members"
+>
+
+<div
+  id="memberSlots"
+  class="member-slots"
+></div>
+
+</div>
+
+<!-- ACTIVE MEMBERS -->
+
+<div class="board active-board">
+
+<img
+  src="assets/images/acfa-active-members.png"
+  alt="ACFA Active Members"
+>
+
+<div
+  id="activeMemberSlots"
+  class="active-member-slots"
+></div>
+
+</div>
+
+</section>
+
+<!-- ======================================================
+     TITLED
+     ====================================================== -->
+
+<section
+  id="titled"
+  class="panel"
+>
+
+<div class="board">
+
+<img
+  src="assets/images/titled-players-board.png"
+  alt="Titled Players"
+>
+
+<div
+  id="titledSlots"
+  class="titled-slots"
+></div>
+
+</div>
+
+</section>
+
+<!-- ======================================================
+     TOURNAMENT
+     ====================================================== -->
+
+<section
+  id="tourney"
+  class="panel"
+>
+
+<article class="card">
+
+<h2>
+ACFA Seasonal Tournaments
+</h2>
+
+<span
+  id="tourneyStatus"
+  class="status"
+>
+Registration Open
+</span>
+
+<div
+  id="countdown"
+  class="countdown"
+>
+—
+</div>
+
+<div
+  id="tournamentButtons"
+  class="tournament-buttons"
+></div>
+
+</article>
+
+<article class="card">
+
+<h2>
+Champions Podium
+</h2>
+
+<div class="podium-stage">
+
+<div
+  id="podiumSecond"
+  class="podium-player second"
+>
+
+<img
+  class="podium-avatar"
+  src="assets/icons/logo.svg"
+  alt=""
+>
+
+<div class="podium-rank">
+2ND PLACE
+</div>
+
+<div class="podium-name">
+To Be Crowned
+</div>
+
+<div class="podium-info">
+—
+</div>
+
+</div>
+
+<div
+  id="podiumFirst"
+  class="podium-player first"
+>
+
+<img
+  class="podium-avatar"
+  src="assets/icons/logo.svg"
+  alt=""
+>
+
+<div class="podium-rank">
+1ST PLACE
+</div>
+
+<div class="podium-name">
+To Be Crowned
+</div>
+
+<div class="podium-info">
+—
+</div>
+
+</div>
+
+<div
+  id="podiumThird"
+  class="podium-player third"
+>
+
+<img
+  class="podium-avatar"
+  src="assets/icons/logo.svg"
+  alt=""
+>
+
+<div class="podium-rank">
+3RD PLACE
+</div>
+
+<div class="podium-name">
+To Be Crowned
+</div>
+
+<div class="podium-info">
+—
+</div>
+
+</div>
+
+<img
+  class="podium-art"
+  src="assets/images/acfa-champions-podium.png"
+  alt="Champions Podium"
+>
+
+</div>
+
+</article>
+
+</section>
+
+<!-- ======================================================
+     STAFF
+     ====================================================== -->
+
+<section
+  id="staff"
+  class="panel"
+>
+
+<article class="card">
+
+<h2>
+ACFA Staff
+</h2>
+
+<div
+  id="staffGrid"
+  class="staff-grid"
+></div>
+
+</article>
+
+</section>
+
+<div class="footer">
+And Chess For All Official
+</div>
+
+</div>
+</div>
+</main>
+
+<script>
+
+/* =========================================================
+   CONFIG
+   ========================================================= */
+
+const API =
+  "https://api.chess.com/pub";
+
+const CLUB_SLUG =
+  "and-chess-for-all-official";
+
+const CLUB_URL =
+  "https://www.chess.com/club/and-chess-for-all-official";
+
+const FALLBACK_AVATAR =
+  "assets/icons/logo.svg";
+
+const PARTNER_CLUBS = [
+
+  {
+    slug:"bgeerrs-hang-out",
+    fallbackName:"Bgeerr's Hang Out"
+  },
+
+  {
+    slug:"dust-kickers",
+    fallbackName:"Dust Kickers"
+  },
+
+  {
+    slug:"the-backrank-bandits",
+    fallbackName:"The Backrank Bandits"
+  },
+
+  {
+    slug:"panhandle-tumbleweed",
+    fallbackName:"Panhandle Tumbleweed"
+  },
+
+  {
+    slug:"panhandle-gunslingers",
+    fallbackName:"Panhandle Gunslingers"
+  }
+
+];
+
+const FALL_START =
+  new Date(
+    "2026-10-05T00:00:00-05:00"
+  );
+
+const FALL_CLOSE =
+  new Date(
+    "2026-10-04T23:59:59-05:00"
+  );
+
+const TITLE_CODES = [
+  "GM",
+  "WGM",
+  "IM",
+  "WIM",
+  "FM",
+  "WFM",
+  "NM",
+  "WNM",
+  "CM",
+  "WCM"
+];
+
+const sleep =
+  ms =>
+    new Promise(
+      resolve =>
+        setTimeout(
+          resolve,
+          ms
+        )
+    );
+
+/* =========================================================
+   HELPERS
+   ========================================================= */
+
+function esc(value = ""){
+
+  return String(value).replace(
+    /[&<>"']/g,
+    char => ({
+      "&":"&amp;",
+      "<":"&lt;",
+      ">":"&gt;",
+      '"':"&quot;",
+      "'":"&#039;"
+    })[char]
+  );
+
+}
+
+function profileURL(username){
+
+  return (
+    "https://www.chess.com/member/" +
+    encodeURIComponent(username)
+  );
+
+}
+
+async function getJSON(
+  path,
+  fallback
+){
+
+  try{
+
+    const response =
+      await fetch(
+        path +
+        "?v=" +
+        Date.now(),
+        {
+          cache:"no-store"
+        }
+      );
+
+    if(!response.ok){
+
+      throw new Error(
+        "HTTP " +
+        response.status
+      );
+
+    }
+
+    return await response.json();
+
+  }
+
+  catch(error){
+
+    console.warn(
+      path,
+      error
+    );
+
+    return fallback;
+
+  }
+
+}
+
+async function chessFetch(path){
+
+  const response =
+    await fetch(
+      API +
+      path,
+      {
+        cache:"no-store"
+      }
+    );
+
+  if(!response.ok){
+
+    throw new Error(
+      "Chess.com HTTP " +
+      response.status
+    );
+
+  }
+
+  return await response.json();
+
+}
+
+/* =========================================================
+   CLUB MEMBERS
+   ========================================================= */
+
+function parseClubMembers(data){
+
+  const collection = [];
+
+  [
+    "weekly",
+    "monthly",
+    "all_time"
+  ]
+  .forEach(
+    bucket => {
+
+      const list =
+        Array.isArray(
+          data?.[bucket]
+        )
+        ?
+        data[bucket]
+        :
+        [];
+
+      list.forEach(
+        item => {
+
+          if(
+            typeof item ===
+            "string"
+          ){
+
+            collection.push({
+              username:item,
+              joined:0,
+              title:""
+            });
+
+          }
+
+          else if(
+            item?.username
+          ){
+
+            collection.push({
+              username:item.username,
+              joined:Number(
+                item.joined ||
+                0
+              ),
+              title:item.title || ""
+            });
+
+          }
+
+        }
+      );
+
+    }
+  );
+
+  const unique =
+    new Map();
+
+  collection.forEach(
+    member => {
+
+      const key =
+        member.username
+        .toLowerCase();
+
+      const existing =
+        unique.get(
+          key
+        );
+
+      if(
+        !existing ||
+        member.joined >
+        existing.joined
+      ){
+
+        unique.set(
+          key,
+          member
+        );
+
+      }
+
+    }
+  );
+
+  return [...unique.values()]
+    .sort(
+      (a,b) =>
+        b.joined -
+        a.joined
+    );
+
+}
+
+/* =========================================================
+   RATINGS
+   ========================================================= */
+
+function bestRating(stats){
+
+  const ratings = [];
+
+  [
+    "chess_rapid",
+    "chess_blitz",
+    "chess_bullet",
+    "chess_daily"
+  ]
+  .forEach(
+    key => {
+
+      const rating =
+        stats?.[key]
+        ?.last
+        ?.rating;
+
+      if(
+        Number.isFinite(
+          rating
+        )
+      ){
+
+        ratings.push(
+          rating
+        );
+
+      }
+
+    }
+  );
+
+  return ratings.length
+    ?
+    Math.max(
+      ...ratings
+    )
+    :
+    0;
+
+}
+
+/* =========================================================
+   PLAYER DATA
+   ========================================================= */
+
+async function enrichPlayer(member){
+
+  const username =
+    typeof member ===
+    "string"
+    ?
+    member
+    :
+    member.username;
+
+  let profile = {};
+  let stats = {};
+
+  try{
+
+    profile =
+      await chessFetch(
+        "/player/" +
+        encodeURIComponent(
+          username
+        )
+      );
+
+  }
+  catch{}
+
+  await sleep(
+    150
+  );
+
+  try{
+
+    stats =
+      await chessFetch(
+        "/player/" +
+        encodeURIComponent(
+          username
+        ) +
+        "/stats"
+      );
+
+  }
+  catch{}
+
+  return {
+
+    username,
+
+    avatar:
+      profile.avatar ||
+      FALLBACK_AVATAR,
+
+    title:
+      profile.title ||
+      (
+        typeof member ===
+        "object"
+        ?
+        member.title ||
+        ""
+        :
+        ""
+      ),
+
+    rating:
+      bestRating(
+        stats
+      )
+
+  };
+
+}
+
+/* =========================================================
+   ACTIVE MEMBERS
+   ========================================================= */
+
+async function loadActiveMembers(){
+
+  const data = await getJSON(
+    "generated/active-members.json",
+    { members:[] }
+  );
+
+  const container =
+    document.getElementById(
+      "activeMemberSlots"
+    );
+
+  if(!container){
+    return;
+  }
+
+  container.innerHTML = "";
+
+  const members =
+    Array.isArray(data.members)
+    ? data.members.filter(Boolean).slice(0,3)
+    : [];
+
+  for(const username of members){
+
+    const player =
+      await enrichPlayer({ username });
+
+    const link =
+      document.createElement("a");
+
+    link.className =
+      "active-member";
+
+    link.href =
+      profileURL(player.username);
+
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+
+    link.innerHTML = `
+      <img
+        class="active-member-avatar"
+        src="${esc(player.avatar)}"
+        alt=""
+      >
+
+      <div class="active-member-info">
+        <strong>${esc(player.username)}</strong>
+        <small>${player.rating ? player.rating + " rating" : "Active Member"}</small>
+      </div>
+    `;
+
+    container.appendChild(link);
+    await sleep(100);
+  }
+}
+
+/* =========================================================
+   CHESS.COM DATA
+   ========================================================= */
+
+async function loadChessComData(){
+
+  try{
+
+    const club =
+      await chessFetch(
+        "/club/" +
+        CLUB_SLUG
+      );
+
+    const memberData =
+      await chessFetch(
+        "/club/" +
+        CLUB_SLUG +
+        "/members"
+      );
+
+    const members =
+      parseClubMembers(
+        memberData
+      );
+
+    document
+    .getElementById(
+      "membersCount"
+    )
+    .textContent =
+      club.members_count ??
+      members.length;
+
+    /* NEW MEMBERS */
+
+    const newest =
+      members.slice(
+        0,
+        5
+      );
+
+    const memberBox =
+      document.getElementById(
+        "memberSlots"
+      );
+
+    memberBox.innerHTML =
+      "";
+
+    for(
+      const member
+      of newest
+    ){
+
+      const player =
+        await enrichPlayer(
+          member
+        );
+
+      const row =
+        document.createElement(
+          "div"
+        );
+
+      row.className =
+        "member";
+
+      row.innerHTML = `
+
+        <img
+          src="${esc(player.avatar)}"
+          alt=""
+        >
+
+        <div>
+
+          <strong>
+            ${esc(player.username)}
+          </strong>
+
+          <small>
+            ${
+              player.rating
+              ?
+              player.rating +
+              " rating"
+              :
+              "ACFA member"
+            }
+          </small>
+
+        </div>
+
+      `;
+
+      row.onclick =
+        () =>
+          window.open(
+            profileURL(
+              player.username
+            ),
+            "_blank"
+          );
+
+      memberBox.appendChild(
+        row
+      );
+
+    }
+
+    /* TITLED MEMBERS */
+
+    const memberMap =
+      new Map(
+        members.map(
+          member => [
+            member.username
+            .toLowerCase(),
+            member
+          ]
+        )
+      );
+
+    const titledFound = [];
+
+    for(
+      const title
+      of TITLE_CODES
+    ){
+
+      if(
+        titledFound.length >=
+        2
+      ){
+        break;
+      }
+
+      try{
+
+        const data =
+          await chessFetch(
+            "/titled/" +
+            title
+          );
+
+        for(
+          const username
+          of data.players ||
+          []
+        ){
+
+          const member =
+            memberMap.get(
+              username
+              .toLowerCase()
+            );
+
+          if(
+            member &&
+            !titledFound.some(
+              item =>
+                item.username
+                .toLowerCase()
+                ===
+                username
+                .toLowerCase()
+            )
+          ){
+
+            titledFound.push({
+              ...member,
+              username,
+              title
+            });
+
+            if(
+              titledFound.length >=
+              2
+            ){
+              break;
+            }
+
+          }
+
+        }
+
+      }
+
+      catch{}
+
+    }
+
+    const titledBox =
+      document.getElementById(
+        "titledSlots"
+      );
+
+    titledBox.innerHTML =
+      "";
+
+    for(
+      const member
+      of titledFound
+    ){
+
+      const player =
+        await enrichPlayer(
+          member
+        );
+
+      const row =
+        document.createElement(
+          "div"
+        );
+
+      row.className =
+        "titled-member";
+
+      row.innerHTML = `
+
+        <img
+          src="${esc(player.avatar)}"
+          alt=""
+        >
+
+        <div>
+
+          <strong>
+
+            <span class="titled-username">
+              ${esc(player.username)}
+            </span>
+
+            <span class="badge">
+              ${esc(player.title)}
+            </span>
+
+          </strong>
+
+          <small>
+            ${
+              player.rating
+              ?
+              player.rating +
+              " rating"
+              :
+              "Titled Player"
+            }
+          </small>
+
+        </div>
+
+      `;
+
+      row.onclick =
+        () =>
+          window.open(
+            profileURL(
+              player.username
+            ),
+            "_blank"
+          );
+
+      titledBox.appendChild(
+        row
+      );
+
+    }
+
+    document
+    .getElementById(
+      "titledCount"
+    )
+    .textContent =
+      titledFound.length;
+
+  }
+
+  catch(error){
+
+    console.error(
+      "ACFA PubAPI:",
+      error
+    );
+
+  }
+
+}
+
+/* =========================================================
+   PARTNER CLUBS
+   ========================================================= */
+
+async function loadPartnerClubs(){
+
+  const track =
+    document.getElementById(
+      "partnerTrack"
+    );
+
+  const status =
+    document.getElementById(
+      "partnerStatus"
+    );
+
+  if(
+    !track ||
+    !status
+  ){
+    return;
+  }
+
+  track.innerHTML = "";
+
+  const clubs = [];
+
+  for(
+    const partner
+    of PARTNER_CLUBS
+  ){
+
+    try{
+
+      const data =
+        await chessFetch(
+          "/club/" +
+          partner.slug
+        );
+
+      clubs.push({
+
+        name:
+          data.name ||
+          partner.fallbackName,
+
+        icon:
+          data.icon ||
+          FALLBACK_AVATAR,
+
+        url:
+          data.url ||
+          (
+            "https://www.chess.com/club/" +
+            partner.slug
+          )
+
+      });
+
+    }
+
+    catch(error){
+
+      console.warn(
+        "Partner PubAPI:",
+        partner.slug,
+        error
+      );
+
+      clubs.push({
+
+        name:
+          partner.fallbackName,
+
+        icon:
+          FALLBACK_AVATAR,
+
+        url:
+          "https://www.chess.com/club/" +
+          partner.slug
+
+      });
+
+    }
+
+    await sleep(
+      100
+    );
+
+  }
+
+  function createPartner(club){
+
+    const link =
+      document.createElement(
+        "a"
+      );
+
+    link.className =
+      "partner-club";
+
+    link.href =
+      club.url;
+
+    link.target =
+      "_blank";
+
+    link.rel =
+      "noopener noreferrer";
+
+    link.innerHTML = `
+
+      <img
+        class="partner-logo"
+        src="${esc(club.icon)}"
+        alt="${esc(club.name)}"
+      >
+
+      <div class="partner-info">
+
+        <strong class="partner-name">
+          ${esc(club.name)}
+        </strong>
+
+        <small>
+          ACFA Partner Club
+        </small>
+
+      </div>
+
+      <span class="partner-arrow">
+        ›
+      </span>
+
+    `;
+
+    return link;
+
+  }
+
+  /*
+    Duplicate the set so the vertical
+    animation can loop continuously.
+  */
+
+  [
+    ...clubs,
+    ...clubs
+  ]
+  .forEach(
+    club => {
+
+      track.appendChild(
+        createPartner(
+          club
+        )
+      );
+
+    }
+  );
+
+  status.textContent =
+    clubs.length +
+    " Partners";
+
+}
+
+/* =========================================================
+   TOURNAMENT BUTTONS
+   ========================================================= */
+
+async function loadTournamentButtons(){
+
+  const tournaments =
+    await getJSON(
+      "generated/tournaments.json",
+      []
+    );
+
+  const container =
+    document.getElementById(
+      "tournamentButtons"
+    );
+
+  container.innerHTML =
+    "";
+
+  tournaments
+  .filter(
+    tournament =>
+      tournament.active &&
+      tournament.url
+  )
+  .forEach(
+    tournament => {
+
+      const button =
+        document.createElement(
+          "a"
+        );
+
+      button.className =
+        "tournament-button";
+
+      button.href =
+        tournament.url;
+
+      button.target =
+        "_blank";
+
+      button.rel =
+        "noopener noreferrer";
+
+      button.textContent =
+        tournament.button ||
+        tournament.name ||
+        "Open Tournament";
+
+      container.appendChild(
+        button
+      );
+
+    }
+  );
+
+}
+
+/* =========================================================
+   STAFF
+   ========================================================= */
+
+async function loadStaff(){
+
+  const staff =
+    await getJSON(
+      "generated/staff.json",
+      []
+    );
+
+  const container =
+    document.getElementById(
+      "staffGrid"
+    );
+
+  container.innerHTML =
+    "";
+
+  staff.sort(
+    (a,b) =>
+      (a.order || 999) -
+      (b.order || 999)
+  );
+
+  for(
+    const member
+    of staff
+  ){
+
+    const player =
+      await enrichPlayer(
+        member
+      );
+
+    const card =
+      document.createElement(
+        "a"
+      );
+
+    card.className =
+      "staff-person";
+
+    card.href =
+      profileURL(
+        member.username
+      );
+
+    card.target =
+      "_blank";
+
+    card.rel =
+      "noopener noreferrer";
+
+    card.innerHTML = `
+
+      <img
+        class="staff-avatar"
+        src="${esc(player.avatar)}"
+        alt=""
+      >
+
+      <strong>
+        ${esc(member.username)}
+      </strong>
+
+      <small>
+        ${esc(member.role)}
+      </small>
+
+    `;
+
+    container.appendChild(
+      card
+    );
+
+  }
+
+}
+
+/* =========================================================
+   CHAMPIONS
+   ========================================================= */
+
+async function loadChampions(){
+
+  const champions =
+    await getJSON(
+      "generated/champions.json",
+      {
+        first:"",
+        second:"",
+        third:""
+      }
+    );
+
+  const data =
+    champions["fall-2026"] ||
+    champions;
+
+  await populatePodium(
+    "podiumFirst",
+    data.first,
+    "1ST PLACE"
+  );
+
+  await populatePodium(
+    "podiumSecond",
+    data.second,
+    "2ND PLACE"
+  );
+
+  await populatePodium(
+    "podiumThird",
+    data.third,
+    "3RD PLACE"
+  );
+
+}
+
+async function populatePodium(
+  id,
+  username,
+  rank
+){
+
+  if(
+    !username
+  ){
+    return;
+  }
+
+  const player =
+    await enrichPlayer({
+      username
+    });
+
+  const element =
+    document.getElementById(
+      id
+    );
+
+  element
+  .querySelector(
+    ".podium-avatar"
+  )
+  .src =
+    player.avatar;
+
+  element
+  .querySelector(
+    ".podium-rank"
+  )
+  .textContent =
+    rank;
+
+  element
+  .querySelector(
+    ".podium-name"
+  )
+  .textContent =
+    player.username;
+
+  element
+  .querySelector(
+    ".podium-info"
+  )
+  .textContent =
+    [
+      player.title,
+      player.rating
+    ]
+    .filter(Boolean)
+    .join(" • ");
+
+}
+
+/* =========================================================
+   CLOCK
+   ========================================================= */
+
+function updateClock(){
+
+  const now =
+    new Date();
+
+  document
+  .getElementById(
+    "digitalClock"
+  )
+  .textContent =
+    now.toLocaleTimeString(
+      [],
+      {
+        hour:"2-digit",
+        minute:"2-digit",
+        second:"2-digit",
+        hour12:true
+      }
+    );
+
+  document
+  .getElementById(
+    "digitalDate"
+  )
+  .textContent =
+    now.toLocaleDateString(
+      [],
+      {
+        weekday:"short",
+        month:"short",
+        day:"numeric",
+        year:"numeric"
+      }
+    );
+
+}
+
+/* =========================================================
+   COUNTDOWN
+   ========================================================= */
+
+function updateTournament(){
+
+  const now =
+    new Date();
+
+  const status =
+    document.getElementById(
+      "tourneyStatus"
+    );
+
+  const output =
+    document.getElementById(
+      "countdown"
+    );
+
+  if(
+    now >=
+    FALL_START
+  ){
+
+    status.textContent =
+      "Tournament Started";
+
+    output.textContent =
+      "LIVE / STARTED";
+
+    return;
+
+  }
+
+  status.textContent =
+    now <
+    FALL_CLOSE
+    ?
+    "Registration Open"
+    :
+    "Registration Closed";
+
+  let diff =
+    FALL_START -
+    now;
+
+  const days =
+    Math.floor(
+      diff /
+      86400000
+    );
+
+  diff %=
+    86400000;
+
+  const hours =
+    Math.floor(
+      diff /
+      3600000
+    );
+
+  diff %=
+    3600000;
+
+  const minutes =
+    Math.floor(
+      diff /
+      60000
+    );
+
+  diff %=
+    60000;
+
+  const seconds =
+    Math.floor(
+      diff /
+      1000
+    );
+
+  output.textContent =
+    `${days}d ${hours}h ${minutes}m ${seconds}s`;
+
+}
+
+/* =========================================================
+   TAB NAVIGATION
+   ========================================================= */
+
+document
+.querySelectorAll(
+  ".tab"
+)
+.forEach(
+  button => {
+
+    button.addEventListener(
+      "click",
+      () => {
+
+        document
+        .querySelectorAll(
+          ".tab"
+        )
+        .forEach(
+          tab =>
+            tab
+            .classList
+            .remove(
+              "active"
+            )
+        );
+
+        document
+        .querySelectorAll(
+          ".panel"
+        )
+        .forEach(
+          panel =>
+            panel
+            .classList
+            .remove(
+              "active"
+            )
+        );
+
+        button
+        .classList
+        .add(
+          "active"
+        );
+
+        document
+        .getElementById(
+          button.dataset.go
+        )
+        .classList
+        .add(
+          "active"
+        );
+
+        document
+        .getElementById(
+          "scrollContent"
+        )
+        .scrollTo({
+          top:0,
+          behavior:"smooth"
+        });
+
+      }
+    );
+
+  }
+);
+
+/* =========================================================
+   COPY CLUB LINK
+   ========================================================= */
+
+const copyClubLink =
+  document.getElementById(
+    "copyClubLink"
+  );
+
+copyClubLink.addEventListener(
+  "click",
+  async event => {
+
+    event.preventDefault();
+
+    try{
+
+      if(
+        navigator.clipboard &&
+        window.isSecureContext
+      ){
+
+        await navigator.clipboard.writeText(
+          CLUB_URL
+        );
+
+      }
+
+      else{
+
+        throw new Error(
+          "Clipboard API unavailable"
+        );
+
+      }
+
+      copyClubLink.textContent =
+        "✓ Link Copied!";
+
+    }
+
+    catch(error){
+
+      const textarea =
+        document.createElement(
+          "textarea"
+        );
+
+      textarea.value =
+        CLUB_URL;
+
+      textarea.setAttribute(
+        "readonly",
+        ""
+      );
+
+      textarea.style.position =
+        "fixed";
+
+      textarea.style.left =
+        "-9999px";
+
+      textarea.style.top =
+        "0";
+
+      document.body.appendChild(
+        textarea
+      );
+
+      textarea.focus();
+
+      textarea.select();
+
+      textarea.setSelectionRange(
+        0,
+        textarea.value.length
+      );
+
+      try{
+
+        document.execCommand(
+          "copy"
+        );
+
+        copyClubLink.textContent =
+          "✓ Link Copied!";
+
+      }
+
+      catch(copyError){
+
+        copyClubLink.textContent =
+          "Copy Failed";
+
+      }
+
+      textarea.remove();
+
+    }
+
+    setTimeout(
+      () => {
+
+        copyClubLink.textContent =
+          "Copy Club Link";
+
+      },
+      1800
+    );
+
+  }
+);
+
+/* =========================================================
+   PARTICLES
+   ========================================================= */
+
+for(
+  let i = 0;
+  i < 24;
+  i++
+){
+
+  const spark =
+    document.createElement(
+      "i"
+    );
+
+  spark.className =
+    "spark";
+
+  spark.style.left =
+    Math.random() *
+    100 +
+    "%";
+
+  spark.style.animationDuration =
+    (
+      8 +
+      Math.random() *
+      12
+    ) +
+    "s";
+
+  spark.style.animationDelay =
+    (
+      -Math.random() *
+      15
+    ) +
+    "s";
+
+  document
+  .getElementById(
+    "fx"
+  )
+  .appendChild(
+    spark
+  );
+
+}
+
+const frameEmbers =
+  document.getElementById(
+    "frameEmbers"
+  );
+
+for(
+  let i = 0;
+  i < 40;
+  i++
+){
+
+  const ember =
+    document.createElement(
+      "i"
+    );
+
+  ember.className =
+    "frame-ember";
+
+  ember.style.left =
+    Math.random() *
+    100 +
+    "%";
+
+  ember.style.animationDuration =
+    (
+      7 +
+      Math.random() *
+      10
+    ) +
+    "s";
+
+  ember.style.animationDelay =
+    (
+      -Math.random() *
+      15
+    ) +
+    "s";
+
+  ember.style.opacity =
+    .25 +
+    Math.random() *
+    .6;
+
+  ember.style.width =
+    (
+      2 +
+      Math.random() *
+      3
+    ) +
+    "px";
+
+  ember.style.height =
+    ember.style.width;
+
+  frameEmbers.appendChild(
+    ember
+  );
+
+}
+
+/* =========================================================
+   START
+   ========================================================= */
+
+updateClock();
+
+updateTournament();
+
+setInterval(
+  updateClock,
+  250
+);
+
+setInterval(
+  updateTournament,
+  1000
+);
+
+loadChessComData();
+
+loadPartnerClubs();
+
+loadActiveMembers();
+
+loadTournamentButtons();
+
+loadStaff();
+
+loadChampions();
+
+</script>
+
+</body>
+</html>

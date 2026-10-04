@@ -1,0 +1,8 @@
+{
+  "ok": false,
+  "started_at": null,
+  "finished_at": null,
+  "club_endpoint": "not-run",
+  "members_endpoint": "not-run",
+  "errors": []
+}
