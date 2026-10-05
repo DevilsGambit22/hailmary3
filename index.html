@@ -222,8 +222,7 @@ button{
   transition:
     transform .35s ease,
     filter .35s ease;
-  animation:
-    logoFloat 4.5s ease-in-out infinite;
+  animation:logoFloat 4.5s ease-in-out infinite;
 }
 
 @keyframes logoFloat{
@@ -892,7 +891,7 @@ button{
 }
 
 .member:nth-child(3){
-  top:60.0%;
+  top:60%;
   left:16.8%;
   width:73%;
 }
@@ -986,7 +985,7 @@ button{
 }
 
 /* =========================================================
-   ACTIVE MEMBERS
+   ACTIVE MEMBERS - FIXED
    ========================================================= */
 
 .active-board{
@@ -1001,36 +1000,46 @@ button{
 
 .active-member{
   position:absolute;
-  left:14%;
-  width:78%;
-  height:11%;
+  left:18%;
+  width:72%;
+  height:9%;
   display:flex;
   align-items:center;
-  gap:9px;
-  padding:0 4%;
+  gap:7px;
+  padding:0;
   pointer-events:auto;
   cursor:pointer;
-  transition:transform .22s ease,filter .22s ease;
+  transition:
+    transform .22s ease,
+    filter .22s ease;
 }
 
-.active-member:nth-child(1){ top:59%; }
-.active-member:nth-child(2){ top:72%; }
-.active-member:nth-child(3){ top:85%; }
+.active-member:nth-child(1){
+  top:61.5%;
+}
+
+.active-member:nth-child(2){
+  top:72.5%;
+}
+
+.active-member:nth-child(3){
+  top:83.5%;
+}
 
 .active-member:hover{
-  transform:translateX(4px) scale(1.015);
+  transform:translateX(3px) scale(1.015);
   filter:drop-shadow(0 3px 5px rgba(0,0,0,.25));
 }
 
 .active-member-avatar{
-  width:38px;
-  height:38px;
-  flex:0 0 38px;
+  width:27px;
+  height:27px;
+  flex:0 0 27px;
   object-fit:cover;
   border:2px solid var(--gold2);
   border-radius:50%;
   background:#071b38;
-  box-shadow:0 0 7px rgba(213,167,61,.42);
+  box-shadow:0 0 5px rgba(213,167,61,.38);
 }
 
 .active-member-info{
@@ -1042,9 +1051,9 @@ button{
   display:block;
   overflow:hidden;
   color:#fff;
-  font-size:12px;
+  font-size:10px;
   font-weight:900;
-  line-height:1.05;
+  line-height:1;
   text-overflow:ellipsis;
   white-space:nowrap;
   text-shadow:0 1px 2px rgba(0,0,0,.9);
@@ -1052,10 +1061,11 @@ button{
 
 .active-member-info small{
   display:block;
-  margin-top:3px;
+  margin-top:2px;
   color:var(--gold2);
-  font-size:8px;
+  font-size:7px;
   font-weight:800;
+  line-height:1;
   white-space:nowrap;
   text-shadow:0 1px 2px rgba(0,0,0,.9);
 }
@@ -1079,7 +1089,7 @@ button{
 }
 
 .titled-member:nth-child(1){
-  top:59.0%;
+  top:59%;
   left:26.5%;
   width:63%;
 }
@@ -1095,7 +1105,7 @@ button{
 }
 
 .titled-member:nth-child(2){
-  top:72.0%;
+  top:72%;
   left:26.5%;
   width:63%;
 }
@@ -1373,6 +1383,20 @@ button{
     font-size:7px;
   }
 
+  .active-member-avatar{
+    width:24px;
+    height:24px;
+    flex-basis:24px;
+  }
+
+  .active-member-info strong{
+    font-size:9px;
+  }
+
+  .active-member-info small{
+    font-size:6.5px;
+  }
+
   .titled-member img{
     width:34px;
     height:34px;
@@ -1407,6 +1431,10 @@ button{
 
 <div id="frameEmbers" class="frame-embers"></div>
 
+<!-- ======================================================
+     ANIMATED ACFA HERO
+     ====================================================== -->
+
 <section class="hero">
 
 <img
@@ -1416,6 +1444,10 @@ button{
 >
 
 </section>
+
+<!-- ======================================================
+     CLOCK
+     ====================================================== -->
 
 <section class="clock-card">
 
@@ -1432,6 +1464,10 @@ YOUR LOCAL TIME
 </div>
 
 </section>
+
+<!-- ======================================================
+     STATS
+     ====================================================== -->
 
 <section class="stats">
 
@@ -1452,17 +1488,41 @@ YOUR LOCAL TIME
 
 </section>
 
+<!-- ======================================================
+     TABS
+     ====================================================== -->
+
 <nav class="tabs">
 
-<button class="tab active" data-go="home">Home</button>
-<button class="tab" data-go="members">Members</button>
-<button class="tab" data-go="titled">Titled</button>
-<button class="tab" data-go="tourney">Tourney</button>
-<button class="tab" data-go="staff">Staff</button>
+<button class="tab active" data-go="home">
+Home
+</button>
+
+<button class="tab" data-go="members">
+Members
+</button>
+
+<button class="tab" data-go="titled">
+Titled
+</button>
+
+<button class="tab" data-go="tourney">
+Tourney
+</button>
+
+<button class="tab" data-go="staff">
+Staff
+</button>
 
 </nav>
 
+<!-- ======================================================
+     CONTENT
+     ====================================================== -->
+
 <div id="scrollContent" class="content">
+
+<!-- HOME -->
 
 <section id="home" class="panel active">
 
@@ -1486,6 +1546,8 @@ No matter your rating or experience, there’s a place for you here. Play, grow,
 </div>
 
 </article>
+
+<!-- DISCORD -->
 
 <article class="card discord-card">
 
@@ -1534,9 +1596,7 @@ Join the ACFA Discord
 
 </article>
 
-<!-- ======================================================
-     DYNAMIC ANNOUNCEMENTS
-     ====================================================== -->
+<!-- ANNOUNCEMENTS -->
 
 <article class="card">
 
@@ -1557,6 +1617,8 @@ Loading announcement…
 </div>
 
 </article>
+
+<!-- QUICK LINKS -->
 
 <article class="card">
 
@@ -1582,7 +1644,11 @@ Forums
 Events
 </a>
 
-<a href="#" id="copyClubLink" role="button">
+<a
+  href="#"
+  id="copyClubLink"
+  role="button"
+>
 Copy Club Link
 </a>
 
@@ -1597,6 +1663,8 @@ Notes
 </div>
 
 </article>
+
+<!-- PARTNER CLUBS -->
 
 <article class="card partner-card">
 
@@ -1630,6 +1698,10 @@ Loading…
 
 </section>
 
+<!-- ======================================================
+     MEMBERS
+     ====================================================== -->
+
 <section id="members" class="panel">
 
 <div class="board">
@@ -1656,6 +1728,10 @@ Loading…
 
 </section>
 
+<!-- ======================================================
+     TITLED
+     ====================================================== -->
+
 <section id="titled" class="panel">
 
 <div class="board">
@@ -1670,6 +1746,10 @@ Loading…
 </div>
 
 </section>
+
+<!-- ======================================================
+     TOURNAMENT
+     ====================================================== -->
 
 <section id="tourney" class="panel">
 
@@ -1707,9 +1787,17 @@ Champions Podium
   alt=""
 >
 
-<div class="podium-rank">2ND PLACE</div>
-<div class="podium-name">To Be Crowned</div>
-<div class="podium-info">—</div>
+<div class="podium-rank">
+2ND PLACE
+</div>
+
+<div class="podium-name">
+To Be Crowned
+</div>
+
+<div class="podium-info">
+—
+</div>
 
 </div>
 
@@ -1721,9 +1809,17 @@ Champions Podium
   alt=""
 >
 
-<div class="podium-rank">1ST PLACE</div>
-<div class="podium-name">To Be Crowned</div>
-<div class="podium-info">—</div>
+<div class="podium-rank">
+1ST PLACE
+</div>
+
+<div class="podium-name">
+To Be Crowned
+</div>
+
+<div class="podium-info">
+—
+</div>
 
 </div>
 
@@ -1735,9 +1831,17 @@ Champions Podium
   alt=""
 >
 
-<div class="podium-rank">3RD PLACE</div>
-<div class="podium-name">To Be Crowned</div>
-<div class="podium-info">—</div>
+<div class="podium-rank">
+3RD PLACE
+</div>
+
+<div class="podium-name">
+To Be Crowned
+</div>
+
+<div class="podium-info">
+—
+</div>
 
 </div>
 
@@ -1752,6 +1856,10 @@ Champions Podium
 </article>
 
 </section>
+
+<!-- ======================================================
+     STAFF
+     ====================================================== -->
 
 <section id="staff" class="panel">
 
@@ -1781,7 +1889,8 @@ And Chess For All Official
    CONFIG
    ========================================================= */
 
-const API = "https://api.chess.com/pub";
+const API =
+  "https://api.chess.com/pub";
 
 const CLUB_SLUG =
   "and-chess-for-all-official";
@@ -1816,17 +1925,37 @@ const PARTNER_CLUBS = [
 ];
 
 const FALL_START =
-  new Date("2026-10-05T00:00:00-05:00");
+  new Date(
+    "2026-10-05T00:00:00-05:00"
+  );
 
 const FALL_CLOSE =
-  new Date("2026-10-04T23:59:59-05:00");
+  new Date(
+    "2026-10-04T23:59:59-05:00"
+  );
 
 const TITLE_CODES = [
-  "GM","WGM","IM","WIM","FM","WFM","NM","WNM","CM","WCM"
+  "GM",
+  "WGM",
+  "IM",
+  "WIM",
+  "FM",
+  "WFM",
+  "NM",
+  "WNM",
+  "CM",
+  "WCM"
 ];
 
 const sleep =
-  ms => new Promise(resolve => setTimeout(resolve,ms));
+  ms =>
+    new Promise(
+      resolve =>
+        setTimeout(
+          resolve,
+          ms
+        )
+    );
 
 /* =========================================================
    HELPERS
@@ -1862,16 +1991,21 @@ async function getJSON(path,fallback){
 
     const response =
       await fetch(
-        path + "?v=" + Date.now(),
+        path +
+        "?v=" +
+        Date.now(),
         {
           cache:"no-store"
         }
       );
 
     if(!response.ok){
+
       throw new Error(
-        "HTTP " + response.status
+        "HTTP " +
+        response.status
       );
+
     }
 
     return await response.json();
@@ -1895,7 +2029,8 @@ async function chessFetch(path){
 
   const response =
     await fetch(
-      API + path,
+      API +
+      path,
       {
         cache:"no-store"
       }
@@ -1930,13 +2065,20 @@ function parseClubMembers(data){
   .forEach(bucket => {
 
     const list =
-      Array.isArray(data?.[bucket])
-      ? data[bucket]
-      : [];
+      Array.isArray(
+        data?.[bucket]
+      )
+      ?
+      data[bucket]
+      :
+      [];
 
     list.forEach(item => {
 
-      if(typeof item === "string"){
+      if(
+        typeof item ===
+        "string"
+      ){
 
         collection.push({
           username:item,
@@ -1946,11 +2088,16 @@ function parseClubMembers(data){
 
       }
 
-      else if(item?.username){
+      else if(
+        item?.username
+      ){
 
         collection.push({
           username:item.username,
-          joined:Number(item.joined || 0),
+          joined:Number(
+            item.joined ||
+            0
+          ),
           title:item.title || ""
         });
 
@@ -1966,14 +2113,18 @@ function parseClubMembers(data){
   collection.forEach(member => {
 
     const key =
-      member.username.toLowerCase();
+      member.username
+      .toLowerCase();
 
     const existing =
-      unique.get(key);
+      unique.get(
+        key
+      );
 
     if(
       !existing ||
-      member.joined > existing.joined
+      member.joined >
+      existing.joined
     ){
 
       unique.set(
@@ -2011,17 +2162,31 @@ function bestRating(stats){
   .forEach(key => {
 
     const rating =
-      stats?.[key]?.last?.rating;
+      stats?.[key]
+      ?.last
+      ?.rating;
 
-    if(Number.isFinite(rating)){
-      ratings.push(rating);
+    if(
+      Number.isFinite(
+        rating
+      )
+    ){
+
+      ratings.push(
+        rating
+      );
+
     }
 
   });
 
   return ratings.length
-    ? Math.max(...ratings)
-    : 0;
+    ?
+    Math.max(
+      ...ratings
+    )
+    :
+    0;
 
 }
 
@@ -2032,9 +2197,12 @@ function bestRating(stats){
 async function enrichPlayer(member){
 
   const username =
-    typeof member === "string"
-    ? member
-    : member.username;
+    typeof member ===
+    "string"
+    ?
+    member
+    :
+    member.username;
 
   let profile = {};
   let stats = {};
@@ -2044,20 +2212,26 @@ async function enrichPlayer(member){
     profile =
       await chessFetch(
         "/player/" +
-        encodeURIComponent(username)
+        encodeURIComponent(
+          username
+        )
       );
 
   }
   catch{}
 
-  await sleep(150);
+  await sleep(
+    150
+  );
 
   try{
 
     stats =
       await chessFetch(
         "/player/" +
-        encodeURIComponent(username) +
+        encodeURIComponent(
+          username
+        ) +
         "/stats"
       );
 
@@ -2075,13 +2249,19 @@ async function enrichPlayer(member){
     title:
       profile.title ||
       (
-        typeof member === "object"
-        ? member.title || ""
-        : ""
+        typeof member ===
+        "object"
+        ?
+        member.title ||
+        ""
+        :
+        ""
       ),
 
     rating:
-      bestRating(stats)
+      bestRating(
+        stats
+      )
 
   };
 
@@ -2153,16 +2333,24 @@ async function loadActiveMembers(){
     return;
   }
 
-  container.innerHTML = "";
+  container.innerHTML =
+    "";
 
   const members =
-    Array.isArray(data.members)
-    ? data.members
-        .filter(Boolean)
-        .slice(0,3)
-    : [];
+    Array.isArray(
+      data.members
+    )
+    ?
+    data.members
+      .filter(Boolean)
+      .slice(0,3)
+    :
+    [];
 
-  for(const username of members){
+  for(
+    const username
+    of members
+  ){
 
     const player =
       await enrichPlayer({
@@ -2170,7 +2358,9 @@ async function loadActiveMembers(){
       });
 
     const link =
-      document.createElement("a");
+      document.createElement(
+        "a"
+      );
 
     link.className =
       "active-member";
@@ -2187,6 +2377,7 @@ async function loadActiveMembers(){
       "noopener noreferrer";
 
     link.innerHTML = `
+
       <img
         class="active-member-avatar"
         src="${esc(player.avatar)}"
@@ -2202,19 +2393,25 @@ async function loadActiveMembers(){
         <small>
           ${
             player.rating
-            ? player.rating + " rating"
-            : "Active Member"
+            ?
+            player.rating +
+            " rating"
+            :
+            "Active Member"
           }
         </small>
 
       </div>
+
     `;
 
     container.appendChild(
       link
     );
 
-    await sleep(100);
+    await sleep(
+      100
+    );
 
   }
 
@@ -2247,12 +2444,12 @@ async function loadChessComData(){
       );
 
     document
-      .getElementById(
-        "membersCount"
-      )
-      .textContent =
-        club.members_count ??
-        members.length;
+    .getElementById(
+      "membersCount"
+    )
+    .textContent =
+      club.members_count ??
+      members.length;
 
     const newest =
       members.slice(
@@ -2265,9 +2462,13 @@ async function loadChessComData(){
         "memberSlots"
       );
 
-    memberBox.innerHTML = "";
+    memberBox.innerHTML =
+      "";
 
-    for(const member of newest){
+    for(
+      const member
+      of newest
+    ){
 
       const player =
         await enrichPlayer(
@@ -2298,8 +2499,11 @@ async function loadChessComData(){
           <small>
             ${
               player.rating
-              ? player.rating + " rating"
-              : "ACFA member"
+              ?
+              player.rating +
+              " rating"
+              :
+              "ACFA member"
             }
           </small>
 
@@ -2326,17 +2530,25 @@ async function loadChessComData(){
       new Map(
         members.map(
           member => [
-            member.username.toLowerCase(),
+            member.username
+            .toLowerCase(),
             member
           ]
         )
       );
 
-    const titledFound = [];
+    const titledFound =
+      [];
 
-    for(const title of TITLE_CODES){
+    for(
+      const title
+      of TITLE_CODES
+    ){
 
-      if(titledFound.length >= 2){
+      if(
+        titledFound.length >=
+        2
+      ){
         break;
       }
 
@@ -2350,21 +2562,25 @@ async function loadChessComData(){
 
         for(
           const username
-          of data.players || []
+          of data.players ||
+          []
         ){
 
           const member =
             memberMap.get(
-              username.toLowerCase()
+              username
+              .toLowerCase()
             );
 
           if(
             member &&
             !titledFound.some(
               item =>
-                item.username.toLowerCase()
+                item.username
+                .toLowerCase()
                 ===
-                username.toLowerCase()
+                username
+                .toLowerCase()
             )
           ){
 
@@ -2375,7 +2591,8 @@ async function loadChessComData(){
             });
 
             if(
-              titledFound.length >= 2
+              titledFound.length >=
+              2
             ){
               break;
             }
@@ -2385,6 +2602,7 @@ async function loadChessComData(){
         }
 
       }
+
       catch{}
 
     }
@@ -2394,9 +2612,13 @@ async function loadChessComData(){
         "titledSlots"
       );
 
-    titledBox.innerHTML = "";
+    titledBox.innerHTML =
+      "";
 
-    for(const member of titledFound){
+    for(
+      const member
+      of titledFound
+    ){
 
       const player =
         await enrichPlayer(
@@ -2435,8 +2657,11 @@ async function loadChessComData(){
           <small>
             ${
               player.rating
-              ? player.rating + " rating"
-              : "Titled Player"
+              ?
+              player.rating +
+              " rating"
+              :
+              "Titled Player"
             }
           </small>
 
@@ -2460,11 +2685,11 @@ async function loadChessComData(){
     }
 
     document
-      .getElementById(
-        "titledCount"
-      )
-      .textContent =
-        titledFound.length;
+    .getElementById(
+      "titledCount"
+    )
+    .textContent =
+      titledFound.length;
 
   }
 
@@ -2495,15 +2720,23 @@ async function loadPartnerClubs(){
       "partnerStatus"
     );
 
-  if(!track || !status){
+  if(
+    !track ||
+    !status
+  ){
     return;
   }
 
-  track.innerHTML = "";
+  track.innerHTML =
+    "";
 
-  const clubs = [];
+  const clubs =
+    [];
 
-  for(const partner of PARTNER_CLUBS){
+  for(
+    const partner
+    of PARTNER_CLUBS
+  ){
 
     try{
 
@@ -2558,7 +2791,9 @@ async function loadPartnerClubs(){
 
     }
 
-    await sleep(100);
+    await sleep(
+      100
+    );
 
   }
 
@@ -2615,13 +2850,17 @@ async function loadPartnerClubs(){
     ...clubs,
     ...clubs
   ]
-  .forEach(club => {
+  .forEach(
+    club => {
 
-    track.appendChild(
-      createPartner(club)
-    );
+      track.appendChild(
+        createPartner(
+          club
+        )
+      );
 
-  });
+    }
+  );
 
   status.textContent =
     clubs.length +
@@ -2646,15 +2885,17 @@ async function loadTournamentButtons(){
       "tournamentButtons"
     );
 
-  container.innerHTML = "";
+  container.innerHTML =
+    "";
 
   tournaments
-    .filter(
-      tournament =>
-        tournament.active &&
-        tournament.url
-    )
-    .forEach(tournament => {
+  .filter(
+    tournament =>
+      tournament.active &&
+      tournament.url
+  )
+  .forEach(
+    tournament => {
 
       const button =
         document.createElement(
@@ -2682,7 +2923,8 @@ async function loadTournamentButtons(){
         button
       );
 
-    });
+    }
+  );
 
 }
 
@@ -2703,7 +2945,8 @@ async function loadStaff(){
       "staffGrid"
     );
 
-  container.innerHTML = "";
+  container.innerHTML =
+    "";
 
   staff.sort(
     (a,b) =>
@@ -2711,7 +2954,10 @@ async function loadStaff(){
       (b.order || 999)
   );
 
-  for(const member of staff){
+  for(
+    const member
+    of staff
+  ){
 
     const player =
       await enrichPlayer(
@@ -2809,7 +3055,9 @@ async function populatePodium(
   rank
 ){
 
-  if(!username){
+  if(
+    !username
+  ){
     return;
   }
 
@@ -2824,37 +3072,37 @@ async function populatePodium(
     );
 
   element
-    .querySelector(
-      ".podium-avatar"
-    )
-    .src =
-      player.avatar;
+  .querySelector(
+    ".podium-avatar"
+  )
+  .src =
+    player.avatar;
 
   element
-    .querySelector(
-      ".podium-rank"
-    )
-    .textContent =
-      rank;
+  .querySelector(
+    ".podium-rank"
+  )
+  .textContent =
+    rank;
 
   element
-    .querySelector(
-      ".podium-name"
-    )
-    .textContent =
-      player.username;
+  .querySelector(
+    ".podium-name"
+  )
+  .textContent =
+    player.username;
 
   element
-    .querySelector(
-      ".podium-info"
-    )
-    .textContent =
-      [
-        player.title,
-        player.rating
-      ]
-      .filter(Boolean)
-      .join(" • ");
+  .querySelector(
+    ".podium-info"
+  )
+  .textContent =
+    [
+      player.title,
+      player.rating
+    ]
+    .filter(Boolean)
+    .join(" • ");
 
 }
 
@@ -2868,34 +3116,34 @@ function updateClock(){
     new Date();
 
   document
-    .getElementById(
-      "digitalClock"
-    )
-    .textContent =
-      now.toLocaleTimeString(
-        [],
-        {
-          hour:"2-digit",
-          minute:"2-digit",
-          second:"2-digit",
-          hour12:true
-        }
-      );
+  .getElementById(
+    "digitalClock"
+  )
+  .textContent =
+    now.toLocaleTimeString(
+      [],
+      {
+        hour:"2-digit",
+        minute:"2-digit",
+        second:"2-digit",
+        hour12:true
+      }
+    );
 
   document
-    .getElementById(
-      "digitalDate"
-    )
-    .textContent =
-      now.toLocaleDateString(
-        [],
-        {
-          weekday:"short",
-          month:"short",
-          day:"numeric",
-          year:"numeric"
-        }
-      );
+  .getElementById(
+    "digitalDate"
+  )
+  .textContent =
+    now.toLocaleDateString(
+      [],
+      {
+        weekday:"short",
+        month:"short",
+        day:"numeric",
+        year:"numeric"
+      }
+    );
 
 }
 
@@ -2918,7 +3166,10 @@ function updateTournament(){
       "countdown"
     );
 
-  if(now >= FALL_START){
+  if(
+    now >=
+    FALL_START
+  ){
 
     status.textContent =
       "Tournament Started";
@@ -2931,9 +3182,12 @@ function updateTournament(){
   }
 
   status.textContent =
-    now < FALL_CLOSE
-    ? "Registration Open"
-    : "Registration Closed";
+    now <
+    FALL_CLOSE
+    ?
+    "Registration Open"
+    :
+    "Registration Closed";
 
   let diff =
     FALL_START -
@@ -2941,28 +3195,35 @@ function updateTournament(){
 
   const days =
     Math.floor(
-      diff / 86400000
+      diff /
+      86400000
     );
 
-  diff %= 86400000;
+  diff %=
+    86400000;
 
   const hours =
     Math.floor(
-      diff / 3600000
+      diff /
+      3600000
     );
 
-  diff %= 3600000;
+  diff %=
+    3600000;
 
   const minutes =
     Math.floor(
-      diff / 60000
+      diff /
+      60000
     );
 
-  diff %= 60000;
+  diff %=
+    60000;
 
   const seconds =
     Math.floor(
-      diff / 1000
+      diff /
+      1000
     );
 
   output.textContent =
@@ -2975,59 +3236,71 @@ function updateTournament(){
    ========================================================= */
 
 document
-  .querySelectorAll(".tab")
-  .forEach(button => {
+.querySelectorAll(
+  ".tab"
+)
+.forEach(
+  button => {
 
     button.addEventListener(
       "click",
       () => {
 
         document
-          .querySelectorAll(".tab")
-          .forEach(
-            tab =>
-              tab.classList.remove(
-                "active"
-              )
-          );
+        .querySelectorAll(
+          ".tab"
+        )
+        .forEach(
+          tab =>
+            tab
+            .classList
+            .remove(
+              "active"
+            )
+        );
 
         document
-          .querySelectorAll(".panel")
-          .forEach(
-            panel =>
-              panel.classList.remove(
-                "active"
-              )
-          );
+        .querySelectorAll(
+          ".panel"
+        )
+        .forEach(
+          panel =>
+            panel
+            .classList
+            .remove(
+              "active"
+            )
+        );
 
         button
-          .classList
-          .add(
-            "active"
-          );
+        .classList
+        .add(
+          "active"
+        );
 
         document
-          .getElementById(
-            button.dataset.go
-          )
-          .classList
-          .add(
-            "active"
-          );
+        .getElementById(
+          button.dataset.go
+        )
+        .classList
+        .add(
+          "active"
+        );
 
         document
-          .getElementById(
-            "scrollContent"
-          )
-          .scrollTo({
-            top:0,
-            behavior:"smooth"
-          });
+        .getElementById(
+          "scrollContent"
+        )
+        .scrollTo({
+          top:0,
+          behavior:"smooth"
+        });
 
       }
     );
 
-  });
+  }
+);
 
 /* =========================================================
    COPY CLUB LINK
@@ -3099,6 +3372,7 @@ copyClubLink.addEventListener(
       );
 
       textarea.focus();
+
       textarea.select();
 
       textarea.setSelectionRange(
@@ -3145,7 +3419,11 @@ copyClubLink.addEventListener(
    PARTICLES
    ========================================================= */
 
-for(let i = 0; i < 24; i++){
+for(
+  let i = 0;
+  i < 24;
+  i++
+){
 
   const spark =
     document.createElement(
@@ -3176,12 +3454,12 @@ for(let i = 0; i < 24; i++){
     "s";
 
   document
-    .getElementById(
-      "fx"
-    )
-    .appendChild(
-      spark
-    );
+  .getElementById(
+    "fx"
+  )
+  .appendChild(
+    spark
+  );
 
 }
 
@@ -3190,7 +3468,11 @@ const frameEmbers =
     "frameEmbers"
   );
 
-for(let i = 0; i < 40; i++){
+for(
+  let i = 0;
+  i < 40;
+  i++
+){
 
   const ember =
     document.createElement(
@@ -3260,10 +3542,6 @@ setInterval(
   1000
 );
 
-/*
-  Managed dashboard data
-*/
-
 loadAnnouncements();
 
 loadActiveMembers();
@@ -3273,10 +3551,6 @@ loadTournamentButtons();
 loadStaff();
 
 loadChampions();
-
-/*
-  Chess.com PubAPI data
-*/
 
 loadChessComData();
 
